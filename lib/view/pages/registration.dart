@@ -153,6 +153,12 @@ class _RegistrationState extends State<Registration> {
                             },
                           ),
                         ),
+                        Visibility(
+                          visible: hasAccount,
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.075,
+                          ),
+                        ),
                       ],
                     ),
                   ],

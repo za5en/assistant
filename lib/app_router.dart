@@ -5,9 +5,10 @@ class AppRouter {
   const AppRouter();
   Route onGenerateRoute(settings) {
     switch (settings.name) {
-      // case '/':
-      //   return MaterialPageRoute(
-      //       settings: settings, builder: (_) => const Profile());
+      case '/':
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (_) => const Registration()); //! change to Profile
       case '/registration':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const Registration());

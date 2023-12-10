@@ -3,10 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/intl_standalone.dart';
 
 import 'app_router.dart';
+import 'controllers/hive_controller.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Intl.systemLocale = await findSystemLocale();
+  await initializeDateFormatting();
+  await HiveController.initHive();
+
   runApp(const AssistantApp());
 }
 

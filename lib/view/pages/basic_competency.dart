@@ -6,15 +6,16 @@ import '../../widgets/a_elevated_button.dart';
 import '../../widgets/a_pop_up_menu_data.dart';
 import '../../widgets/a_svg_icon.dart';
 
-class Competency extends StatefulWidget {
-  const Competency({super.key});
+class BasicCompetency extends StatefulWidget {
+  const BasicCompetency({super.key});
 
   @override
-  State<Competency> createState() => _CompetencyState();
+  State<BasicCompetency> createState() => _BasicCompetencyState();
 }
 
-class _CompetencyState extends State<Competency> {
+class _BasicCompetencyState extends State<BasicCompetency> {
   var spec = 'Выбор специализации';
+  var grade = 'Выбор грейда';
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -42,7 +43,7 @@ class _CompetencyState extends State<Competency> {
                         Padding(
                           padding: EdgeInsets.all(w * 0.021),
                           child: Text(
-                            'Выбор компетенций',
+                            'Выбор текущей\nкомпетенции',
                             style:
                                 Theme.of(context).textTheme.bodyLarge?.copyWith(
                                       fontSize: 30,
@@ -110,6 +111,38 @@ class _CompetencyState extends State<Competency> {
                             ];
                             Hive.box('user').put('basic', specList[value]);
                             spec = specList[value];
+                            // switch (value) {
+                            //   case 0:
+                            //     setState(() {
+                            //       Hive.box('user').put('basic', 'C#');
+                            //     });
+                            //     break;
+                            //   case 1:
+                            //     setState(() {
+                            //       Hive.box('user').put('basic', 'Java');
+                            //     });
+                            //     break;
+                            //   case 2:
+                            //     setState(() {
+                            //       Hive.box('user').put('basic', 'C++');
+                            //     });
+                            //     break;
+                            //   case 3:
+                            //     setState(() {
+                            //       Hive.box('user').put('basic', 'DevOps');
+                            //     });
+                            //     break;
+                            //   case 4:
+                            //     setState(() {
+                            //       Hive.box('user').put('basic', 'Data analyst');
+                            //     });
+                            //     break;
+                            //   case 5:
+                            //     setState(() {
+                            //       Hive.box('user').put('basic', 'Testing');
+                            //     });
+                            //     break;
+                            // }
                           },
                           popupMenuData: [
                             //fetch on app load to popupMenuData list
@@ -139,6 +172,113 @@ class _CompetencyState extends State<Competency> {
                             ),
                           ],
                         ),
+                        ParamWithDropDown(
+                          popupSize: 140,
+                          popupMenuButton: Hive.box('user')
+                                      .get('basic_grade') ==
+                                  null
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).hoverColor,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(w * 0.027)),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(grade,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge),
+                                      const ASvgIcon(
+                                          assetName:
+                                              'assets/images/triangle.svg')
+                                    ],
+                                  ),
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).hoverColor,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(w * 0.027)),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(Hive.box('user').get('basic_grade'),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge),
+                                      const ASvgIcon(
+                                          assetName:
+                                              'assets/images/triangle.svg')
+                                    ],
+                                  ),
+                                ),
+                          onSelected: (value) {
+                            var gradeList = [
+                              'junior',
+                              'middle',
+                              'senior',
+                              'lead',
+                              'boss'
+                            ];
+                            Hive.box('user')
+                                .put('basic_grade', gradeList[value]);
+                            grade = gradeList[value];
+                            // switch (value) {
+                            //   case 0:
+                            //     setState(() {
+                            //       Hive.box('user').put('basic_grade', 'junior');
+                            //     });
+                            //     break;
+                            //   case 1:
+                            //     setState(() {
+                            //       Hive.box('user').put('basic_grade', 'middle');
+                            //     });
+                            //     break;
+                            //   case 2:
+                            //     setState(() {
+                            //       Hive.box('user').put('basic_grade', 'senior');
+                            //     });
+                            //     break;
+                            //   case 3:
+                            //     setState(() {
+                            //       Hive.box('user').put('basic_grade', 'lead');
+                            //     });
+                            //     break;
+                            //   case 4:
+                            //     setState(() {
+                            //       Hive.box('user').put('basic_grade', 'boss');
+                            //     });
+                            //     break;
+                            // }
+                          },
+                          popupMenuData: [
+                            APopupMenuData(
+                              child: Text('junior',
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                            ),
+                            APopupMenuData(
+                              child: Text('middle',
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                            ),
+                            APopupMenuData(
+                              child: Text('senior',
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                            ),
+                            APopupMenuData(
+                              child: Text('lead',
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                            ),
+                            APopupMenuData(
+                              child: Text('boss',
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -147,12 +287,23 @@ class _CompetencyState extends State<Competency> {
               AElevatedButtonExtended(
                 text: 'Ок',
                 onPressed: () async {
-                  if (spec != 'Выбор специализации') {
+                  if (spec != 'Выбор специализации' &&
+                      grade != 'Выбор грейда') {
                     //api method set def spec n grade
-                    Get.offNamed('/skills');
+                    await Hive.box('settings').put('initial_screen', '/');
+                    Get.offNamed('/');
                   } else {
-                    showAlertDialog(
-                        context, 'Необходимо указать специализацию');
+                    if (spec == 'Выбор специализации' &&
+                        grade == 'Выбор грейда') {
+                      showAlertDialog(
+                          context, 'Необходимо указать специализацию и грейд');
+                    } else if (spec != 'Выбор специализации' &&
+                        grade == 'Выбор грейда') {
+                      showAlertDialog(context, 'Необходимо указать грейд');
+                    } else {
+                      showAlertDialog(
+                          context, 'Необходимо указать специализацию');
+                    }
                   }
                 },
                 padding: EdgeInsets.only(

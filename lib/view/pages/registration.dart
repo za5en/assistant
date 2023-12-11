@@ -195,7 +195,8 @@ class _RegistrationState extends State<Registration> {
                       //!
                       Hive.box('user').put('isLogged', true);
                       // if (userController.user.isEmailConfirmed) {
-                      Get.offAllNamed('/competency');
+                      Hive.box('settings').put('initial_screen', '/');
+                      Get.offAllNamed('/');
                       // } else {
                       // Get.back();
                       // Get.to(() => const EmailConfirm());
@@ -253,7 +254,9 @@ class _RegistrationState extends State<Registration> {
                       Hive.box('user').put('password', password);
                       //!
                       Hive.box('user').put('isLogged', true);
-                      Get.offAllNamed('/competency');
+                      Hive.box('settings')
+                          .put('initial_screen', '/basic_competency');
+                      Get.offAllNamed('/basic_competency');
                       // Get.back();
                       // Get.to(() => const EmailConfirm());
                       // } else {

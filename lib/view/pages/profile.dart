@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import '../../controllers/hive_controller.dart';
+import '../../data/grade.dart';
 import '../../widgets/a_app_bar.dart';
 // import '../../widgets/a_image_picker.dart';
 import '../../widgets/a_pop_up_menu_data.dart';
@@ -268,9 +269,28 @@ class ProfileState extends State<Profile> {
                                 child: SizedBox(
                                   width: double.infinity,
                                   child: StreamBuilder<Object>(
-                                      stream: Hive.box('grades').watch(),
+                                      stream: Hive.box<Grade>('grades').watch(),
                                       builder: (context, snapshot) {
-                                        return Stack();
+                                        List<Grade> grades = [];
+                                        // for (var i = 0;
+                                        //     i <
+                                        //         Hive.box<Grade>('grades')
+                                        //             .length;
+                                        //     i++) {
+                                        //   grades.add(Hive.box<Grade>('grades')
+                                        //           .getAt(i) ??
+                                        //       Grade(
+                                        //           gradeName: '123',
+                                        //           specName: '456',
+                                        //           isFinished: false,
+                                        //           id: 0,
+                                        //           gradeId: 1));
+                                        // }
+                                        grades.addAll(
+                                            Hive.box<Grade>('grades').values);
+                                        return GradesBlock(
+                                          grades: grades,
+                                        );
                                       }),
                                 ),
                               ),
@@ -367,18 +387,42 @@ class ProfileState extends State<Profile> {
       );
 }
 
+class GradesBlock extends StatefulWidget {
+  const GradesBlock({super.key, required this.grades});
+
+  final List<Grade> grades;
+
+  @override
+  State<GradesBlock> createState() => _GradesBlockState();
+}
+
+class _GradesBlockState extends State<GradesBlock> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: widget.grades.length,
+        itemBuilder: ((context, index) {
+          return GradeCard(
+              gradeName: widget.grades[index].gradeName,
+              specName: widget.grades[index].specName,
+              isFinished: widget.grades[index].isFinished);
+        }));
+  }
+}
+
 class GradeCard extends StatefulWidget {
-  const GradeCard(
-      {super.key,
-      required this.gradeName,
-      required this.specName,
-      required this.isFinished,
-      required this.id});
+  const GradeCard({
+    super.key,
+    required this.gradeName,
+    required this.specName,
+    required this.isFinished,
+    // required this.id
+  });
 
   final String gradeName;
   final String specName;
   final bool isFinished;
-  final int id;
+  // final int id;
 
   @override
   State<GradeCard> createState() => _GradeCardState();
@@ -418,6 +462,7 @@ class _GradeCardState extends State<GradeCard> {
                 child: const ASvgIcon(
                     assetName: 'assets/images/skills_settings.svg'),
                 onTap: () {
+                  testDialog(context);
                   //get info about skills
                   // Get.to(() => Skills());
                 },
@@ -436,4 +481,69 @@ class _GradeCardState extends State<GradeCard> {
       ),
     );
   }
+
+  testDialog(
+    context,
+  ) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Theme.of(context).listTileTheme.tileColor,
+            title: Column(
+              children: [
+                Text(
+                  'Пройти тест?',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontSize: 14),
+                ),
+              ],
+            ),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            content: Row(children: [
+              Expanded(
+                child: Padding(
+                    padding: EdgeInsets.only(
+                      right: MediaQuery.of(context).size.width * 0.013,
+                    ),
+                    child: getButton(context, 'Да', () {
+                      // Get.to(() => Skills());
+                    })),
+              ),
+              Expanded(
+                child: Padding(
+                    padding: EdgeInsets.only(
+                      right: MediaQuery.of(context).size.width * 0.013,
+                    ),
+                    child: getButton(context, 'Нет', () {
+                      Navigator.pop(context);
+                    })),
+              ),
+            ]),
+            actionsAlignment: MainAxisAlignment.spaceAround,
+          );
+        });
+  }
+
+  Widget getButton(BuildContext context, String text, Function() onPressed) =>
+      Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).hoverColor,
+          borderRadius: BorderRadius.all(
+              Radius.circular(MediaQuery.of(context).size.width * 0.03)),
+        ),
+        child: TextButton(
+          onPressed: onPressed,
+          child: Text(
+            text,
+            style:
+                Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 14),
+          ),
+        ),
+      );
 }

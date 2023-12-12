@@ -6,14 +6,14 @@ import '../../widgets/a_elevated_button.dart';
 import '../../widgets/a_pop_up_menu_data.dart';
 import '../../widgets/a_svg_icon.dart';
 
-class Competency extends StatefulWidget {
-  const Competency({super.key});
+class NewCompetency extends StatefulWidget {
+  const NewCompetency({super.key});
 
   @override
-  State<Competency> createState() => _CompetencyState();
+  State<NewCompetency> createState() => _NewCompetencyState();
 }
 
-class _CompetencyState extends State<Competency> {
+class _NewCompetencyState extends State<NewCompetency> {
   var spec = 'Выбор специализации';
   @override
   Widget build(BuildContext context) {

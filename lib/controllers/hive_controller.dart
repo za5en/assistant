@@ -1,10 +1,17 @@
+import 'package:assistant/data/competency.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../data/grade.dart';
 
 class HiveController {
   static Future<void> initHive() async {
     await Hive.initFlutter();
+    Hive.registerAdapter(GradeAdapter());
+    Hive.registerAdapter(CompetencyAdapter());
     await Hive.openBox('settings');
     await Hive.openBox('user');
+    await Hive.openBox<Grade>('grades');
+    await Hive.openBox<Competency>('competencies');
   }
 
   static Future<void> logout() async {

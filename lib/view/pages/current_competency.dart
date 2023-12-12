@@ -1,4 +1,11 @@
+import 'package:assistant/data/grade.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+
+import '../../data/competency.dart';
+import '../../widgets/a_app_bar.dart';
+import '../../widgets/a_svg_icon.dart';
 
 class CurrentCompetency extends StatefulWidget {
   const CurrentCompetency({super.key});
@@ -10,7 +17,55 @@ class CurrentCompetency extends StatefulWidget {
 class _CurrentCompetencyState extends State<CurrentCompetency> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    var theme = Theme.of(context);
+    var competencies = Hive.box<Competency>('competencies').values.toList();
+    return Scaffold(
+        backgroundColor: theme.colorScheme.background,
+        appBar: AAppBar(
+          title: Text('Текущие компетенции',
+              style: Theme.of(context).textTheme.titleMedium),
+          leading: InkWell(
+            child: Container(
+              margin: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
+              child: ASvgIcon(
+                assetName: 'assets/images/arrow_left.svg',
+                height: 30,
+                color: theme.colorScheme.tertiary,
+              ),
+            ),
+            onTap: () {
+              Get.back();
+            },
+          ),
+        ),
+        body: SafeArea(
+            child: Stack(children: [
+          StreamBuilder<Object>(
+              stream: Hive.box<Grade>('grades').watch(),
+              builder: (context, snapshot) {
+                return ListView.builder(
+                    itemCount: competencies.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 30.0, left: 30.0, right: 30.0),
+                          child: Column(
+                            children: competencies[index]
+                                .grades!
+                                .where((element) => element.isFinished == true)
+                                .map(
+                                  (e) => InkWell(
+                                    child: CurrentGradeCard(
+                                        gradeName: e.gradeName,
+                                        specName: e.specName),
+                                    onTap: () {}, //! добавить что-нибудь
+                                  ),
+                                )
+                                .toList(),
+                          ));
+                    });
+              })
+        ])));
   }
 }
 

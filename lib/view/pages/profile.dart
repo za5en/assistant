@@ -1,4 +1,6 @@
 import 'package:assistant/view/pages/current_competency.dart';
+import 'package:assistant/view/pages/markdown_view.dart';
+import 'package:assistant/view/pages/testing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -9,6 +11,7 @@ import '../../widgets/a_app_bar.dart';
 import '../../widgets/a_pop_up_menu_data.dart';
 import '../../widgets/a_popup_menu.dart';
 import '../../widgets/a_svg_icon.dart';
+import 'skill_select.dart';
 // import 'settings.dart';
 
 class Profile extends StatefulWidget {
@@ -23,6 +26,7 @@ class ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     // final controller = Get.find<UserController>();
+    // double h = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
     final String name =
         Hive.box('user').get('name', defaultValue: 'Имя Фамилия');
@@ -53,7 +57,9 @@ class ProfileState extends State<Profile> {
                     style: theme.textTheme.bodyLarge,
                   ),
                   onTap: () {
-                    Get.to(() => const CurrentCompetency());
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Get.to(() => const CurrentCompetency());
+                    });
                   },
                 ),
                 // APopupMenuData(
@@ -250,45 +256,54 @@ class ProfileState extends State<Profile> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          // Expanded(
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.only(
-                          //       bottom: 80,
-                          //     ),
-                          //     child: SingleChildScrollView(
-                          //       child: SizedBox(
-                          //         width: double.infinity,
-                          //         child: StreamBuilder<Object>(
-                          //             stream: Hive.box<Grade>('grades').watch(),
-                          //             builder: (context, snapshot) {
-                          //               List<Grade> grades = [];
-                          //               // for (var i = 0;
-                          //               //     i <
-                          //               //         Hive.box<Grade>('grades')
-                          //               //             .length;
-                          //               //     i++) {
-                          //               //   grades.add(Hive.box<Grade>('grades')
-                          //               //           .getAt(i) ??
-                          //               //       Grade(
-                          //               //           gradeName: '123',
-                          //               //           specName: '456',
-                          //               //           isFinished: false,
-                          //               //           id: 0,
-                          //               //           gradeId: 1));
-                          //               // }
-                          //               grades.addAll(
-                          //                   Hive.box<Grade>('grades').values);
-                          //               return GradesBlock(
-                          //                 grades: grades,
-                          //               );
-                          //             }),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 10,
+                              ),
+                              // child: SingleChildScrollView(
+                              //   child: SizedBox(
+                              //     width: double.infinity,
+                              child: StreamBuilder<Object>(
+                                  stream: Hive.box<Grade>('grades').watch(),
+                                  builder: (context, snapshot) {
+                                    List<Grade> grades = [];
+                                    // for (var i = 0;
+                                    //     i <
+                                    //         Hive.box<Grade>('grades')
+                                    //             .length;
+                                    //     i++) {
+                                    //   grades.add(Hive.box<Grade>('grades')
+                                    //           .getAt(i) ??
+                                    //       Grade(
+                                    //           gradeName: '123',
+                                    //           specName: '456',
+                                    //           isFinished: false,
+                                    //           id: 0,
+                                    //           gradeId: 1));
+                                    // }
+                                    grades.addAll(
+                                        Hive.box<Grade>('grades').values);
+                                    // return SizedBox(
+                                    //   height: h * 0.9,
+                                    return Column(
+                                      children: [
+                                        Expanded(
+                                          child: GradesBlock(
+                                            grades: grades,
+                                          ),
+                                        ),
+                                      ],
+                                      // ),
+                                    );
+                                  }),
+                            ),
+                            //   ),
+                            // ),
+                          ),
                         ],
                       ),
                     ),
@@ -393,12 +408,27 @@ class _GradesBlockState extends State<GradesBlock> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
         itemCount: widget.grades.length,
+        scrollDirection: Axis.vertical,
         itemBuilder: ((context, index) {
-          return GradeCard(
-              gradeName: widget.grades[index].gradeName,
-              specName: widget.grades[index].specName,
-              isFinished: widget.grades[index].isFinished);
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 25.0),
+                child: GradeCard(
+                    gradeName: widget.grades[index].gradeName,
+                    specName: widget.grades[index].specName,
+                    isFinished: widget.grades[index].isFinished,
+                    hiveKey: widget.grades[index].key),
+              ),
+              Visibility(
+                  visible: index == widget.grades.length - 1,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.06,
+                  )),
+            ],
+          );
         }));
   }
 }
@@ -409,12 +439,14 @@ class GradeCard extends StatefulWidget {
     required this.gradeName,
     required this.specName,
     required this.isFinished,
+    required this.hiveKey,
     // required this.id
   });
 
   final String gradeName;
   final String specName;
   final bool isFinished;
+  final dynamic hiveKey;
   // final int id;
 
   @override
@@ -425,52 +457,104 @@ class _GradeCardState extends State<GradeCard> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(w * 0.027)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            width: w * 0.55,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.gradeName,
-                  style: const TextStyle(color: Colors.black, fontSize: 17),
-                ),
-                Text(
-                  widget.specName,
-                  style: const TextStyle(color: Colors.black, fontSize: 12),
-                )
-              ],
+      child: InkWell(
+        onTap: () {
+          Get.to(() => const MarkdownView());
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              height: h * 0.12,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: h * 0.02, left: 15.0),
+                    child: Text(
+                      widget.gradeName,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: h * 0.01, bottom: h * 0.01, left: 15.0),
+                    child: Text(
+                      widget.specName,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          Visibility(
-              visible: widget.isFinished ? false : true,
-              child: InkWell(
-                child: const ASvgIcon(
-                    assetName: 'assets/images/skills_settings.svg'),
-                onTap: () {
-                  testDialog(context);
-                  //get info about skills
-                  // Get.to(() => Skills());
-                },
-              )),
-          InkWell(
-            child: ASvgIcon(
-                assetName: widget.isFinished
-                    ? 'assets/images/test_disabled.svg'
-                    : 'assets/images/test_active.svg'),
-            onTap: () {
-              //get info about test
-              Get.toNamed('/testing');
-            },
-          )
-        ],
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: Visibility(
+                      visible: widget.isFinished ? false : true,
+                      child: InkWell(
+                        child: const Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            ASvgIcon(
+                                assetName: 'assets/images/skills_settings.svg'),
+                            Icon(
+                              Icons.settings,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          //get info about skills
+                          Get.to(() => Skills(
+                                header: 'hard',
+                                specName: widget.specName,
+                                gradeName: widget.gradeName,
+                                skillsList: const [
+                                  'hard1',
+                                  'hard2',
+                                  'hard3',
+                                  'hard4',
+                                  'hard5'
+                                ],
+                                edit: true,
+                              ));
+                        },
+                      )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: InkWell(
+                    child: ASvgIcon(
+                        assetName: widget.isFinished
+                            ? 'assets/images/test_disabled.svg'
+                            : 'assets/images/test_active.svg'),
+                    onTap: () {
+                      //get info about test
+                      if (!widget.isFinished) {
+                        testDialog(context);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -505,7 +589,36 @@ class _GradeCardState extends State<GradeCard> {
                       right: MediaQuery.of(context).size.width * 0.013,
                     ),
                     child: getButton(context, 'Да', () {
-                      // Get.to(() => Skills());
+                      Get.back();
+                      Get.to(() => Testing(
+                              hiveKey: widget.hiveKey,
+                              questionAmount: 4,
+                              testQuestions: const [
+                                'Вопрос 1',
+                                'Вопрос 2',
+                                'Вопрос 3',
+                                'Вопрос 4'
+                              ],
+                              testAnswers: const [
+                                'Ответ 1',
+                                'Ответ 2',
+                                'Ответ 3',
+                                'Ответ 1',
+                                'Ответ 2',
+                                'Ответ 3',
+                                'Ответ 1',
+                                'Ответ 2',
+                                'Ответ 3',
+                                'Ответ 1',
+                                'Ответ 2',
+                                'Ответ 3'
+                              ],
+                              testRight: const [
+                                1,
+                                1,
+                                1,
+                                1
+                              ]));
                     })),
               ),
               Expanded(

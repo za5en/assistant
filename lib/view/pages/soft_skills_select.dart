@@ -1,4 +1,4 @@
-import 'package:assistant/view/pages/soft_skills_select.dart';
+import 'package:assistant/view/pages/skill_select.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -8,8 +8,8 @@ import '../../widgets/a_app_bar.dart';
 import '../../widgets/a_elevated_button.dart';
 import 'new_competency.dart';
 
-class Skills extends StatefulWidget {
-  const Skills(
+class SoftSkills extends StatefulWidget {
+  const SoftSkills(
       {super.key,
       required this.header,
       required this.specName,
@@ -25,10 +25,10 @@ class Skills extends StatefulWidget {
   final bool edit;
 
   @override
-  State<Skills> createState() => _SkillsState();
+  State<SoftSkills> createState() => _SoftSkillsState();
 }
 
-class _SkillsState extends State<Skills> {
+class _SoftSkillsState extends State<SoftSkills> {
   List<int> indexes = [];
   List<String> selected = [];
 
@@ -158,7 +158,7 @@ class _SkillsState extends State<Skills> {
                           '${widget.specName}_${widget.gradeName}_hard',
                           indexes);
                     }
-                    Get.off(() => SoftSkills(
+                    Get.off(() => Skills(
                           header: 'soft',
                           specName: widget.specName,
                           skillsList: const [
@@ -179,6 +179,11 @@ class _SkillsState extends State<Skills> {
                       var gradeName = '';
                       if (getGrade.isNotEmpty) {
                         gradeId = getGrade.first.gradeId + 1;
+                        if (gradeId == 5) {
+                          Get.until((route) => Get.currentRoute == '/');
+                          Get.snackbar(
+                              'Ошибка', 'Вы уже достигли максимального грейда');
+                        }
                         switch (gradeId) {
                           case 1:
                             gradeName = 'middle';

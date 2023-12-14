@@ -171,52 +171,64 @@ class _RegistrationState extends State<Registration> {
                   if (hasAccount) {
                     if (validateEmail(email) == null &&
                         validatePassword(password) == null) {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        },
-                      );
-                      //var userController = Get.find<UserController>();
-                      oldEmail =
-                          Hive.box('user').get('email', defaultValue: '1');
-                      // var message =
-                      //     await userController.getInfoByEmail(email, password);
-                      // if (message ==
-                      //     'User information has been successfully received') {
-                      if (oldEmail != Hive.box('user').get('email')) {
-                        await HiveController.logout();
+                      if (Hive.box('user').get('password') == null &&
+                          Hive.box('user').get('email') == null) {
+                        showAlertDialog(
+                            context, 'Необходимо зарегистрировать аккаунт');
+                      } else if (Hive.box('user').get('password') != null &&
+                          password == Hive.box('user').get('password') &&
+                          Hive.box('user').get('email') != null &&
+                          email == Hive.box('user').get('email')) {
+                        //! после подключения бэка убрать
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          },
+                        );
+                        //var userController = Get.find<UserController>();
+                        oldEmail =
+                            Hive.box('user').get('email', defaultValue: '1');
+                        // var message =
+                        //     await userController.getInfoByEmail(email, password);
+                        // if (message ==
+                        //     'User information has been successfully received') {
+                        if (oldEmail != Hive.box('user').get('email')) {
+                          await HiveController.logout();
+                        }
+                        //! потом убрать
+                        Hive.box('user').put('email', email);
+                        Hive.box('user').put('password', password);
+                        //!
+                        Hive.box('user').put('isLogged', true);
+                        // if (userController.user.isEmailConfirmed) {
+                        Hive.box('settings').put('initial_screen', '/');
+                        Get.back();
+                        Get.offAllNamed('/');
+                        // } else {
+                        // Get.back();
+                        // Get.to(() => const EmailConfirm());
+                        // }
+                        // } else {
+                        //   setState(() {
+                        //     if (message == 'User not found') {
+                        //       Get.back();
+                        //       showAlertDialog(context, 'Данные указаны неверно');
+                        //     } else {
+                        //       Get.snackbar(
+                        //         ':(',
+                        //         'Произошла ошибка на сервере',
+                        //         snackPosition: SnackPosition.TOP,
+                        //         duration: const Duration(seconds: 5),
+                        //       );
+                        //     }
+                        //   });
+                        // }
+                      } else {
+                        showAlertDialog(context, 'Данные указаны неверно');
                       }
-                      //! потом убрать
-                      Hive.box('user').put('email', email);
-                      Hive.box('user').put('password', password);
-                      //!
-                      Hive.box('user').put('isLogged', true);
-                      // if (userController.user.isEmailConfirmed) {
-                      Hive.box('settings').put('initial_screen', '/');
-                      Get.back();
-                      Get.offAllNamed('/');
-                      // } else {
-                      // Get.back();
-                      // Get.to(() => const EmailConfirm());
-                      // }
-                      // } else {
-                      //   setState(() {
-                      //     if (message == 'User not found') {
-                      //       Get.back();
-                      //       showAlertDialog(context, 'Данные указаны неверно');
-                      //     } else {
-                      //       Get.snackbar(
-                      //         ':(',
-                      //         'Произошла ошибка на сервере',
-                      //         snackPosition: SnackPosition.TOP,
-                      //         duration: const Duration(seconds: 5),
-                      //       );
-                      //     }
-                      //   });
-                      // }
                     } else {
                       if (validateEmail(email) != null) {
                         showAlertDialog(context, '${validateEmail(email)}\n');

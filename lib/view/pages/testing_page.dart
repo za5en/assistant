@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 
+import '../../data/competency.dart';
+import '../../data/grade.dart';
 import '../../widgets/a_app_bar.dart';
+import '../../widgets/a_svg_icon.dart';
 
 class Testing extends StatefulWidget {
   const Testing({
@@ -10,12 +14,14 @@ class Testing extends StatefulWidget {
     required this.testQuestions,
     required this.testAnswers,
     required this.testRight,
+    required this.hiveKey,
   });
 
   final int questionAmount;
   final List<String> testQuestions;
   final List<String> testAnswers;
   final List<int> testRight;
+  final dynamic hiveKey;
 
   @override
   State<Testing> createState() => _TestingState();
@@ -38,6 +44,19 @@ class _TestingState extends State<Testing> {
     return Scaffold(
       appBar: AAppBar(
         title: Text('Тест', style: Theme.of(context).textTheme.titleMedium),
+        leading: InkWell(
+          child: Container(
+            margin: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
+            child: const ASvgIcon(
+              assetName: 'assets/images/arrow_left.svg',
+              // height: 30,
+              color: Colors.black,
+            ),
+          ),
+          onTap: () {
+            Get.back();
+          },
+        ),
       ),
       body: SingleChildScrollView(
           child: Column(
@@ -60,12 +79,9 @@ class _TestingState extends State<Testing> {
                             itemBuilder: (context, index) {
                               return Column(
                                 children: [
-                                  const Padding(
-                                    padding: EdgeInsets.only(top: 5.0),
-                                    child: Divider(),
-                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20.0),
+                                    padding: const EdgeInsets.only(
+                                        top: 20.0, bottom: 10.0),
                                     child: Text(
                                       widget.testQuestions[index],
                                       style: theme.textTheme.bodyMedium,
@@ -202,6 +218,21 @@ class _TestingState extends State<Testing> {
                                       rights++;
                                     }
                                     index++;
+                                  }
+                                  if (rights == 4) {
+                                    Grade grade = Hive.box<Grade>('grades')
+                                        .get(widget.hiveKey)!;
+                                    grade.isFinished = true;
+                                    Hive.box<Grade>('grades')
+                                        .put(widget.hiveKey, grade);
+                                    HiveList<Grade> grades =
+                                        HiveList(Hive.box<Grade>('grades'));
+                                    grades.add(Hive.box<Grade>('grades')
+                                        .get(widget.hiveKey)!);
+                                    Competency comp = Competency();
+                                    comp.grades = grades;
+                                    await Hive.box<Competency>('competencies')
+                                        .add(comp);
                                   }
                                   // switch (rights) {
                                   //   case 0:

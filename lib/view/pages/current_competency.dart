@@ -23,7 +23,10 @@ class _CurrentCompetencyState extends State<CurrentCompetency> {
         backgroundColor: theme.colorScheme.background,
         appBar: AAppBar(
           title: Text('Текущие компетенции',
-              style: Theme.of(context).textTheme.titleMedium),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontSize: 20)),
           leading: InkWell(
             child: Container(
               margin: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
@@ -84,26 +87,41 @@ class _CurrentGradeCardState extends State<CurrentGradeCard> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 217, 217, 217),
         borderRadius: BorderRadius.all(Radius.circular(w * 0.027)),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            width: w * 0.55,
+            height: h * 0.12,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.gradeName,
-                  style: const TextStyle(color: Colors.black, fontSize: 17),
+                Padding(
+                  padding: EdgeInsets.only(top: h * 0.02, left: 15.0),
+                  child: Text(
+                    widget.gradeName,
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w500),
+                  ),
                 ),
-                Text(
-                  widget.specName,
-                  style: const TextStyle(color: Colors.black, fontSize: 12),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: h * 0.01, bottom: h * 0.01, left: 15.0),
+                  child: Text(
+                    widget.specName,
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400),
+                  ),
                 )
               ],
             ),

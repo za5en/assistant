@@ -1,3 +1,5 @@
+import 'package:assistant/data/competency.dart';
+import 'package:assistant/data/grade.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -16,9 +18,11 @@ class BasicCompetency extends StatefulWidget {
 class _BasicCompetencyState extends State<BasicCompetency> {
   var spec = 'Выбор специализации';
   var grade = 'Выбор грейда';
+  var gradeId = -1;
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -56,142 +60,118 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ParamWithDropDown(
-                          popupSize: MediaQuery.of(context).size.width * 0.55,
-                          popupMenuButton: Hive.box('user').get('basic') == null
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).hoverColor,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(w * 0.027)),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: h * 0.02),
+                          child: ParamWithDropDown(
+                            popupSize: MediaQuery.of(context).size.width * 0.55,
+                            popupMenuButton: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).hoverColor,
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(w * 0.027)),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Text(spec,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge),
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10.0),
-                                        child: Text(spec,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge),
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(right: 10.0),
-                                        child: ASvgIcon(
-                                          assetName:
-                                              'assets/images/triangle.svg',
-                                          color: Colors.black,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              : Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).hoverColor,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(w * 0.027)),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10.0),
-                                        child: Text(
-                                            Hive.box('user').get('basic'),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge),
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(right: 10.0),
-                                        child: ASvgIcon(
-                                          assetName:
-                                              'assets/images/triangle.svg',
-                                          color: Colors.black,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                          onSelected: (value) {
-                            // var specList = userController.getSpecs();
-                            var specList = [
-                              'C#',
-                              'Java',
-                              'C++',
-                              'DevOps',
-                              'Data analyst',
-                              'Testing'
-                            ];
-                            Hive.box('user').put('basic', specList[value]);
-                            setState(() {
-                              spec = specList[value];
-                            });                            
-                            // switch (value) {
-                            //   case 0:
-                            //     setState(() {
-                            //       Hive.box('user').put('basic', 'C#');
-                            //     });
-                            //     break;
-                            //   case 1:
-                            //     setState(() {
-                            //       Hive.box('user').put('basic', 'Java');
-                            //     });
-                            //     break;
-                            //   case 2:
-                            //     setState(() {
-                            //       Hive.box('user').put('basic', 'C++');
-                            //     });
-                            //     break;
-                            //   case 3:
-                            //     setState(() {
-                            //       Hive.box('user').put('basic', 'DevOps');
-                            //     });
-                            //     break;
-                            //   case 4:
-                            //     setState(() {
-                            //       Hive.box('user').put('basic', 'Data analyst');
-                            //     });
-                            //     break;
-                            //   case 5:
-                            //     setState(() {
-                            //       Hive.box('user').put('basic', 'Testing');
-                            //     });
-                            //     break;
-                            // }
-                          },
-                          popupMenuData: [
-                            //fetch on app load to popupMenuData list
-                            APopupMenuData(
-                              child: Text('C#',
-                                  style: Theme.of(context).textTheme.bodyLarge),
+                                  const Padding(
+                                    padding: EdgeInsets.only(right: 10.0),
+                                    child: ASvgIcon(
+                                      assetName: 'assets/images/triangle.svg',
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                            APopupMenuData(
-                              child: Text('Java',
-                                  style: Theme.of(context).textTheme.bodyLarge),
-                            ),
-                            APopupMenuData(
-                              child: Text('C++',
-                                  style: Theme.of(context).textTheme.bodyLarge),
-                            ),
-                            APopupMenuData(
-                              child: Text('DevOps',
-                                  style: Theme.of(context).textTheme.bodyLarge),
-                            ),
-                            APopupMenuData(
-                              child: Text('Data analyst',
-                                  style: Theme.of(context).textTheme.bodyLarge),
-                            ),
-                            APopupMenuData(
-                              child: Text('Testing',
-                                  style: Theme.of(context).textTheme.bodyLarge),
-                            ),
-                          ],
+                            onSelected: (value) {
+                              // var specList = userController.getSpecs();
+                              var specList = [
+                                'C#',
+                                'Java',
+                                'C++',
+                                'DevOps',
+                                'Data analyst',
+                                'Testing'
+                              ];
+                              Hive.box('user').put('basic', specList[value]);
+                              setState(() {
+                                spec = specList[value];
+                              });
+                              // switch (value) {
+                              //   case 0:
+                              //     setState(() {
+                              //       Hive.box('user').put('basic', 'C#');
+                              //     });
+                              //     break;
+                              //   case 1:
+                              //     setState(() {
+                              //       Hive.box('user').put('basic', 'Java');
+                              //     });
+                              //     break;
+                              //   case 2:
+                              //     setState(() {
+                              //       Hive.box('user').put('basic', 'C++');
+                              //     });
+                              //     break;
+                              //   case 3:
+                              //     setState(() {
+                              //       Hive.box('user').put('basic', 'DevOps');
+                              //     });
+                              //     break;
+                              //   case 4:
+                              //     setState(() {
+                              //       Hive.box('user').put('basic', 'Data analyst');
+                              //     });
+                              //     break;
+                              //   case 5:
+                              //     setState(() {
+                              //       Hive.box('user').put('basic', 'Testing');
+                              //     });
+                              //     break;
+                              // }
+                            },
+                            popupMenuData: [
+                              //fetch on app load to popupMenuData list
+                              APopupMenuData(
+                                child: Text('C#',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                              ),
+                              APopupMenuData(
+                                child: Text('Java',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                              ),
+                              APopupMenuData(
+                                child: Text('C++',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                              ),
+                              APopupMenuData(
+                                child: Text('DevOps',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                              ),
+                              APopupMenuData(
+                                child: Text('Data analyst',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                              ),
+                              APopupMenuData(
+                                child: Text('Testing',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                              ),
+                            ],
+                          ),
                         ),
                         ParamWithDropDown(
                           popupSize: MediaQuery.of(context).size.width * 0.55,
@@ -269,6 +249,7 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                                 .put('basic_grade', gradeList[value]);
                             setState(() {
                               grade = gradeList[value];
+                              gradeId = value;
                             });
                             // switch (value) {
                             //   case 0:
@@ -332,6 +313,19 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                   if (spec != 'Выбор специализации' &&
                       grade != 'Выбор грейда') {
                     //api method set def spec n grade
+                    Grade basicGrade = Grade(
+                        gradeName: grade,
+                        specName: spec,
+                        isFinished: true,
+                        id: 1,
+                        gradeId: gradeId);
+                    await Hive.box<Grade>('grades').put('basic', basicGrade);
+                    HiveList<Grade> grades =
+                        HiveList(Hive.box<Grade>('grades'));
+                    grades.add(Hive.box<Grade>('grades').get('basic')!);
+                    Competency comp = Competency();
+                    comp.grades = grades;
+                    await Hive.box<Competency>('competencies').add(comp);
                     await Hive.box('settings').put('initial_screen', '/');
                     Get.offNamed('/');
                   } else {

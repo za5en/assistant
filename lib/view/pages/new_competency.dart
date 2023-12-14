@@ -1,3 +1,4 @@
+import 'package:assistant/view/pages/skill_select.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -136,7 +137,18 @@ class _NewCompetencyState extends State<NewCompetency> {
                 onPressed: () async {
                   if (spec != 'Выбор специализации') {
                     //api method set def spec n grade
-                    Get.offNamed('/skills');
+                    Get.off(() => Skills(
+                          header: 'hard',
+                          specName: spec,
+                          skillsList: const [
+                            'hard1',
+                            'hard2',
+                            'hard3',
+                            'hard4',
+                            'hard5'
+                          ],
+                          edit: false,
+                        ));
                   } else {
                     showAlertDialog(
                         context, 'Необходимо указать специализацию');

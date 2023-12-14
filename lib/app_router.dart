@@ -33,7 +33,13 @@ class AppRouter {
             settings: settings, builder: (_) => const Settings());
       case '/skills':
         return MaterialPageRoute(
-            settings: settings, builder: (_) => const Skills(header: 'hard'));
+            settings: settings,
+            builder: (_) => const Skills(
+                  header: 'hard',
+                  specName: 'spec',
+                  skillsList: [],
+                  edit: false,
+                ));
       case '/markdown':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const MarkdownView());
@@ -41,10 +47,12 @@ class AppRouter {
         return MaterialPageRoute(
             settings: settings,
             builder: (_) => const Testing(
-                questionAmount: 1,
-                testQuestions: [],
-                testAnswers: [],
-                testRight: []));
+                  questionAmount: 1,
+                  testQuestions: [],
+                  testAnswers: [],
+                  testRight: [],
+                  hiveKey: null,
+                ));
       default:
         throw ErrorDescription('Unknown route name: ${settings.name}');
     }

@@ -42,8 +42,7 @@ class ANavigationDrawer extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 20, bottom: 30),
                     child: GestureDetector(
                       onTap: () {
-                        Get.back();
-                        // Get.toNamed('/profile');
+                        Get.until((route) => Get.currentRoute == '/');
                       },
                       child: Row(
                         children: [
@@ -81,6 +80,13 @@ class ANavigationDrawer extends StatelessWidget {
                     icon: 'folder',
                     text: 'Файлы',
                     onTap: null,
+                  ),
+                  NavigationDrawerItem(
+                    icon: 'null',
+                    text: 'filename.md',
+                    onTap: () {
+                      Get.back();
+                    },
                   ),
                 ],
               ),

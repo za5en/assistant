@@ -56,48 +56,33 @@ class _NewCompetencyState extends State<NewCompetency> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ParamWithDropDown(
-                          popupSize: 140,
-                          popupMenuButton: Hive.box('user').get('basic') == null
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).hoverColor,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(w * 0.027)),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(spec,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge),
-                                      const ASvgIcon(
-                                          assetName:
-                                              'assets/images/triangle.svg')
-                                    ],
+                          popupSize: MediaQuery.of(context).size.width * 0.55,
+                          popupMenuButton: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).hoverColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(w * 0.027)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Text(spec,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(right: 10.0),
+                                  child: ASvgIcon(
+                                    assetName: 'assets/images/triangle.svg',
+                                    color: Colors.black,
                                   ),
                                 )
-                              : Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).hoverColor,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(w * 0.027)),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(Hive.box('user').get('basic'),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge),
-                                      const ASvgIcon(
-                                          assetName:
-                                              'assets/images/triangle.svg')
-                                    ],
-                                  ),
-                                ),
+                              ],
+                            ),
+                          ),
                           onSelected: (value) {
                             // var specList = userController.getSpecs();
                             var specList = [
@@ -109,7 +94,9 @@ class _NewCompetencyState extends State<NewCompetency> {
                               'Testing'
                             ];
                             Hive.box('user').put('basic', specList[value]);
-                            spec = specList[value];
+                            setState(() {
+                              spec = specList[value];
+                            });
                           },
                           popupMenuData: [
                             //fetch on app load to popupMenuData list

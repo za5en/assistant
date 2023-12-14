@@ -27,10 +27,10 @@ class _CurrentCompetencyState extends State<CurrentCompetency> {
           leading: InkWell(
             child: Container(
               margin: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
-              child: ASvgIcon(
+              child: const ASvgIcon(
                 assetName: 'assets/images/arrow_left.svg',
-                height: 30,
-                color: theme.colorScheme.tertiary,
+                // height: 30,
+                color: Colors.black,
               ),
             ),
             onTap: () {

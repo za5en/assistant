@@ -13,19 +13,37 @@ class Skills extends StatefulWidget {
   State<Skills> createState() => _SkillsState();
 }
 
-var skills = ['1', '2', '3', '4', '5'];
-
 class _SkillsState extends State<Skills> {
   var indexes = [];
-  bool? isChecked = false;
+
+  var skills = [
+    'skill name',
+    'skill name',
+    'skill name',
+    'skill name',
+    'skill name'
+  ];
+
+  List<bool?> isChecked = [
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
+
+  // bool? isChecked = false;
 
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AAppBar(
-        title:
-            Text(widget.header, style: Theme.of(context).textTheme.titleMedium),
+        title: Text(widget.header,
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontSize: 28)),
       ),
       body: SafeArea(
         child: Stack(
@@ -45,16 +63,19 @@ class _SkillsState extends State<Skills> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        skills[index],
-                        style:
-                            Theme.of(context).textTheme.displaySmall?.copyWith(
-                                  fontFamily: 'OpenSans',
-                                  fontWeight: FontWeight.w500,
-                                ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Text(
+                          skills[index],
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                        ),
                       ),
                       Checkbox(
-                        value: isChecked,
+                        value: isChecked[index],
                         checkColor: Colors.white,
                         fillColor: MaterialStateProperty.all<Color>(
                             Theme.of(context).primaryColor),
@@ -67,7 +88,7 @@ class _SkillsState extends State<Skills> {
                             } else {
                               indexes.add(index);
                             }
-                            isChecked = newValue;
+                            isChecked[index] = newValue;
                           });
                         },
                       ),
@@ -79,12 +100,12 @@ class _SkillsState extends State<Skills> {
             AElevatedButtonExtended(
               text: 'Ок',
               onPressed: () async {
-                if (indexes.length > 1) {
+                if (indexes.isNotEmpty) {
                   //api method set def spec n grade
                   if (widget.header == 'hard') {
-                    Get.to(() => const Skills(header: 'soft'));
+                    Get.off(() => const Skills(header: 'soft'));
                   } else {
-                    Get.to('/markdown');
+                    Get.offNamed('/markdown');
                   }
                 } else {
                   showAlertDialog(

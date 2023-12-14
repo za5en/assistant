@@ -57,7 +57,7 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ParamWithDropDown(
-                          popupSize: 140,
+                          popupSize: MediaQuery.of(context).size.width * 0.55,
                           popupMenuButton: Hive.box('user').get('basic') == null
                               ? Container(
                                   decoration: BoxDecoration(
@@ -69,13 +69,22 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(spec,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge),
-                                      const ASvgIcon(
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: Text(spec,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(right: 10.0),
+                                        child: ASvgIcon(
                                           assetName:
-                                              'assets/images/triangle.svg')
+                                              'assets/images/triangle.svg',
+                                          color: Colors.black,
+                                        ),
+                                      )
                                     ],
                                   ),
                                 )
@@ -89,13 +98,23 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(Hive.box('user').get('basic'),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge),
-                                      const ASvgIcon(
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: Text(
+                                            Hive.box('user').get('basic'),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(right: 10.0),
+                                        child: ASvgIcon(
                                           assetName:
-                                              'assets/images/triangle.svg')
+                                              'assets/images/triangle.svg',
+                                          color: Colors.black,
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -110,7 +129,9 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                               'Testing'
                             ];
                             Hive.box('user').put('basic', specList[value]);
-                            spec = specList[value];
+                            setState(() {
+                              spec = specList[value];
+                            });                            
                             // switch (value) {
                             //   case 0:
                             //     setState(() {
@@ -173,7 +194,7 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                           ],
                         ),
                         ParamWithDropDown(
-                          popupSize: 140,
+                          popupSize: MediaQuery.of(context).size.width * 0.55,
                           popupMenuButton: Hive.box('user')
                                       .get('basic_grade') ==
                                   null
@@ -187,13 +208,22 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(grade,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge),
-                                      const ASvgIcon(
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: Text(grade,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(right: 10.0),
+                                        child: ASvgIcon(
                                           assetName:
-                                              'assets/images/triangle.svg')
+                                              'assets/images/triangle.svg',
+                                          color: Colors.black,
+                                        ),
+                                      )
                                     ],
                                   ),
                                 )
@@ -207,13 +237,23 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(Hive.box('user').get('basic_grade'),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge),
-                                      const ASvgIcon(
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: Text(
+                                            Hive.box('user').get('basic_grade'),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(right: 10.0),
+                                        child: ASvgIcon(
                                           assetName:
-                                              'assets/images/triangle.svg')
+                                              'assets/images/triangle.svg',
+                                          color: Colors.black,
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -227,7 +267,9 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                             ];
                             Hive.box('user')
                                 .put('basic_grade', gradeList[value]);
-                            grade = gradeList[value];
+                            setState(() {
+                              grade = gradeList[value];
+                            });
                             // switch (value) {
                             //   case 0:
                             //     setState(() {

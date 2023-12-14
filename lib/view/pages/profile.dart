@@ -25,7 +25,7 @@ class ProfileState extends State<Profile> {
     // final controller = Get.find<UserController>();
     final theme = Theme.of(context);
     final String name =
-        Hive.box('user').get('name', defaultValue: 'Noname User');
+        Hive.box('user').get('name', defaultValue: 'Имя Фамилия');
     final List nameWords = name.split(' ');
     String nameLetters = nameWords[0][0];
     if (nameWords.length > 1) {
@@ -38,8 +38,9 @@ class ProfileState extends State<Profile> {
     //   showLetters = false;
     // }
     return Scaffold(
-      backgroundColor: theme.colorScheme.secondaryContainer,
+      backgroundColor: theme.colorScheme.background,
       appBar: AAppBar(
+        backgroundColor: theme.colorScheme.secondaryContainer,
         size: 50,
         actions: [
           Padding(
@@ -122,9 +123,9 @@ class ProfileState extends State<Profile> {
                   },
                 ),
               ],
-              icon: ASvgIcon(
+              icon: const ASvgIcon(
                 assetName: 'assets/images/circle_column.svg',
-                color: theme.colorScheme.tertiary,
+                color: Colors.black,
                 height: 30,
               ),
             ),
@@ -138,22 +139,24 @@ class ProfileState extends State<Profile> {
               child: Column(
                 children: [
                   Container(
-                    color: theme.colorScheme.background,
+                    color: theme.colorScheme.secondaryContainer,
                     child: Column(
                       children: [
                         SizedBox(
-                          width: 80,
+                          width: MediaQuery.of(context).size.width,
                           child: Stack(
                             children: [
                               Visibility(
                                 visible: showLetters,
                                 child: Stack(
                                   children: [
-                                    CircleAvatar(
-                                      radius: 40,
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .tertiaryContainer,
+                                    Center(
+                                      child: CircleAvatar(
+                                        radius: 40,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .tertiaryContainer,
+                                      ),
                                     ),
                                     Positioned.fill(
                                       child: Center(
@@ -235,7 +238,7 @@ class ProfileState extends State<Profile> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 15, bottom: 5),
+                          padding: const EdgeInsets.only(top: 15, bottom: 25),
                           child: Text(
                             Hive.box('user')
                                 .get('name', defaultValue: 'Имя Фамилия'),
@@ -250,52 +253,42 @@ class ProfileState extends State<Profile> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 25,
-                            ),
-                            child: Text(
-                              'Советы для повышения продуктивности',
-                              style: theme.textTheme.titleMedium,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: 80,
-                              ),
-                              child: SingleChildScrollView(
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: StreamBuilder<Object>(
-                                      stream: Hive.box<Grade>('grades').watch(),
-                                      builder: (context, snapshot) {
-                                        List<Grade> grades = [];
-                                        // for (var i = 0;
-                                        //     i <
-                                        //         Hive.box<Grade>('grades')
-                                        //             .length;
-                                        //     i++) {
-                                        //   grades.add(Hive.box<Grade>('grades')
-                                        //           .getAt(i) ??
-                                        //       Grade(
-                                        //           gradeName: '123',
-                                        //           specName: '456',
-                                        //           isFinished: false,
-                                        //           id: 0,
-                                        //           gradeId: 1));
-                                        // }
-                                        grades.addAll(
-                                            Hive.box<Grade>('grades').values);
-                                        return GradesBlock(
-                                          grades: grades,
-                                        );
-                                      }),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Expanded(
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.only(
+                          //       bottom: 80,
+                          //     ),
+                          //     child: SingleChildScrollView(
+                          //       child: SizedBox(
+                          //         width: double.infinity,
+                          //         child: StreamBuilder<Object>(
+                          //             stream: Hive.box<Grade>('grades').watch(),
+                          //             builder: (context, snapshot) {
+                          //               List<Grade> grades = [];
+                          //               // for (var i = 0;
+                          //               //     i <
+                          //               //         Hive.box<Grade>('grades')
+                          //               //             .length;
+                          //               //     i++) {
+                          //               //   grades.add(Hive.box<Grade>('grades')
+                          //               //           .getAt(i) ??
+                          //               //       Grade(
+                          //               //           gradeName: '123',
+                          //               //           specName: '456',
+                          //               //           isFinished: false,
+                          //               //           id: 0,
+                          //               //           gradeId: 1));
+                          //               // }
+                          //               grades.addAll(
+                          //                   Hive.box<Grade>('grades').values);
+                          //               return GradesBlock(
+                          //                 grades: grades,
+                          //               );
+                          //             }),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -309,7 +302,7 @@ class ProfileState extends State<Profile> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).iconTheme.color,
         elevation: 0,
-        child: Image.asset('assets/images/plus.png'),
+        child: const ASvgIcon(assetName: 'assets/images/plus.svg'),
         onPressed: () {
           Get.toNamed('/competency');
         },

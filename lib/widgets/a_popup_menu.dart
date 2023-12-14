@@ -55,7 +55,7 @@ PopupMenuItem _getPopupMenuItem(BuildContext context, String? icon,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            width: size ?? 100,
+            width: size ?? 120,
             child: child,
           ),
           icon != null

@@ -18,7 +18,7 @@ class ANavigationDrawer extends StatelessWidget {
           borderRadius: BorderRadius.horizontal(right: Radius.circular(20))),
       backgroundColor: theme.colorScheme.background,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
         child: Stack(
           children: [
             SingleChildScrollView(
@@ -43,14 +43,14 @@ class ANavigationDrawer extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         Get.back();
-                        Get.toNamed('/profile');
+                        // Get.toNamed('/profile');
                       },
                       child: Row(
                         children: [
                           // if (controller.user.imagePath ==
                           //         'assets/images/avatar.png')
                           Padding(
-                            padding: const EdgeInsets.only(right: 30),
+                            padding: const EdgeInsets.only(right: 20),
                             child: CircleAvatar(
                               radius: 30,
                               backgroundColor: Theme.of(context)
@@ -78,7 +78,7 @@ class ANavigationDrawer extends StatelessWidget {
                     ),
                   ),
                   const NavigationDrawerItem(
-                    icon: 'assets/images/files.svg',
+                    icon: 'folder',
                     text: 'Файлы',
                     onTap: null,
                   ),
@@ -94,10 +94,10 @@ class ANavigationDrawer extends StatelessWidget {
 
 class NavigationDrawerItem extends StatelessWidget {
   const NavigationDrawerItem(
-      {Key? key, this.onTap, required this.icon, required this.text})
+      {Key? key, this.onTap, this.icon, required this.text})
       : super(key: key);
   final void Function()? onTap;
-  final String icon;
+  final String? icon;
   final String text;
   @override
   Widget build(BuildContext context) {
@@ -108,13 +108,13 @@ class NavigationDrawerItem extends StatelessWidget {
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: ASvgIcon(
-                assetName: icon,
-                color: Theme.of(context).colorScheme.secondary,
-                height: 30,
-              ),
-            ),
+                padding: const EdgeInsets.only(right: 20),
+                child: icon == 'folder'
+                    ? const Icon(
+                        Icons.folder,
+                        color: Colors.black,
+                      )
+                    : null),
             Text(text, style: Theme.of(context).textTheme.bodyLarge),
           ],
         ),

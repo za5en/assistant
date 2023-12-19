@@ -199,12 +199,12 @@ class _RegistrationState extends State<Registration> {
                           await HiveController.logout();
                         }
                         //! потом убрать
-                        Hive.box('user').put('email', email);
-                        Hive.box('user').put('password', password);
+                        await Hive.box('user').put('email', email);
+                        await Hive.box('user').put('password', password);
                         //!
-                        Hive.box('user').put('isLogged', true);
+                        await Hive.box('user').put('isLogged', true);
                         // if (userController.user.isEmailConfirmed) {
-                        Hive.box('settings').put('initial_screen', '/');
+                        await Hive.box('settings').put('initial_screen', '/');
                         Get.back();
                         Get.offAllNamed('/');
                         // } else {
@@ -257,17 +257,17 @@ class _RegistrationState extends State<Registration> {
                       //   if (Hive.box('user').get('isLogged') == null) {
                       //     userController.upload();
                       //   }
-                      if (oldEmail != Hive.box('user').get('email') &&
-                          Hive.box('user').get('isLogged') != null) {
-                        HiveController.newAcc();
-                      }
+                      // if (oldEmail != Hive.box('user').get('email') &&
+                      //     Hive.box('user').get('isLogged') != null) {
+                      //   HiveController.newAcc();
+                      // }
                       //! потом убрать
-                      Hive.box('user').put('email', email);
-                      Hive.box('user').put('name', name);
-                      Hive.box('user').put('password', password);
+                      await Hive.box('user').put('email', email);
+                      await Hive.box('user').put('name', name);
+                      await Hive.box('user').put('password', password);
                       //!
-                      Hive.box('user').put('isLogged', true);
-                      Hive.box('settings')
+                      await Hive.box('user').put('isLogged', true);
+                      await Hive.box('settings')
                           .put('initial_screen', '/basic_competency');
                       Get.back();
                       Get.offAllNamed('/basic_competency');

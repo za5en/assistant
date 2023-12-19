@@ -29,7 +29,7 @@ class SoftSkills extends StatefulWidget {
 }
 
 class _SoftSkillsState extends State<SoftSkills> {
-  List<int> indexes = [];
+  var indexes = [];
   List<String> selected = [];
 
   var skills = [
@@ -47,7 +47,7 @@ class _SoftSkillsState extends State<SoftSkills> {
     var j = 0;
 
     if (widget.edit) {
-      List<int> skList = [];
+      var skList = [];
       if (widget.header == 'hard') {
         skList = Hive.box('user').get(
             '${widget.specName}_${widget.gradeName}_hard',
@@ -161,6 +161,7 @@ class _SoftSkillsState extends State<SoftSkills> {
                     Get.off(() => Skills(
                           header: 'soft',
                           specName: widget.specName,
+                          gradeName: widget.gradeName,
                           skillsList: const [
                             'soft1',
                             'soft2',
@@ -168,7 +169,7 @@ class _SoftSkillsState extends State<SoftSkills> {
                             'soft4',
                             'soft5'
                           ],
-                          selectedSkills: indexes,
+                          selectedSkills: indexes.cast<int>(),
                           edit: widget.edit,
                         ));
                   } else {
@@ -209,10 +210,10 @@ class _SoftSkillsState extends State<SoftSkills> {
                           id: Hive.box<Grade>('grades').length,
                           gradeId: gradeId);
                       Hive.box<Grade>('grades').add(grade);
-                      Hive.box('user').put(
+                      await Hive.box('user').put(
                           '${widget.specName}_${gradeName}_hard',
                           widget.selectedSkills);
-                      Hive.box('user')
+                      await Hive.box('user')
                           .put('${widget.specName}_${gradeName}_soft', indexes);
                       Get.offNamed('/markdown');
                     } else {

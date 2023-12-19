@@ -175,68 +175,32 @@ class _BasicCompetencyState extends State<BasicCompetency> {
                         ),
                         ParamWithDropDown(
                           popupSize: MediaQuery.of(context).size.width * 0.55,
-                          popupMenuButton: Hive.box('user')
-                                      .get('basic_grade') ==
-                                  null
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).hoverColor,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(w * 0.027)),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10.0),
-                                        child: Text(grade,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge),
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(right: 10.0),
-                                        child: ASvgIcon(
-                                          assetName:
-                                              'assets/images/triangle.svg',
-                                          color: Colors.black,
-                                        ),
-                                      )
-                                    ],
+                          popupMenuButton: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).hoverColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(w * 0.027)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Text(grade,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(right: 10.0),
+                                  child: ASvgIcon(
+                                    assetName: 'assets/images/triangle.svg',
+                                    color: Colors.black,
                                   ),
                                 )
-                              : Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).hoverColor,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(w * 0.027)),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10.0),
-                                        child: Text(
-                                            Hive.box('user').get('basic_grade'),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge),
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(right: 10.0),
-                                        child: ASvgIcon(
-                                          assetName:
-                                              'assets/images/triangle.svg',
-                                          color: Colors.black,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
+                              ],
+                            ),
+                          ),
                           onSelected: (value) {
                             var gradeList = [
                               'junior',

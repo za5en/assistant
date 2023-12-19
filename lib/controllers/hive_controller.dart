@@ -24,5 +24,19 @@ class HiveController {
     await Hive.box('settings').put('initial_screen', '/registration');
   }
 
-  static void newAcc() async {}
+  static void newAcc() async {
+    await Hive.box('user').delete('name');
+    await Hive.box('user').delete('password');
+    await Hive.box('user').delete('email');
+
+    var size = Hive.box<Competency>('competencies').length;
+    for (var i = size - 1; i >= 0; i--) {
+      await Hive.box<Competency>('competencies').deleteAt(i);
+    }
+
+    size = Hive.box<Grade>('grades').length;
+    for (var i = size - 1; i >= 0; i--) {
+      await Hive.box<Grade>('grades').deleteAt(i);
+    }
+  }
 }

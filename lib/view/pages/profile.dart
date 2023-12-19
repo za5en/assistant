@@ -79,19 +79,23 @@ class ProfileState extends State<Profile> {
                   onTap: () {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       afterDialog(context, 'Выйти из аккаунта?', () {
+                        print(Hive.box('user').get('password'));
+                        print(Hive.box('user').get('email'));
                         Navigator.pop(context);
                         // var userController = Get.find<UserController>();
                         // если аккаунт удаляем, то и все данные, что с ним связаны тоже надо чистить
                         if (Hive.box('user').get('isLogged') != false) {
                           Hive.box('user').put('isLogged', false);
                         }
-                        if (Hive.box('user').get('name') != null) {
-                          Hive.box('user').delete('name');
-                          Hive.box('user').delete('email');
-                        }
+                        // if (Hive.box('user').get('name') != null) {
+                        //   Hive.box('user').delete('name');
+                        //   Hive.box('user').delete('email');
+                        // }
                         // userController.logout();
                         HiveController.logout();
-                        HiveController.newAcc();
+                        // HiveController.newAcc();
+                        print(Hive.box('user').get('password'));
+                        print(Hive.box('user').get('email'));
                         Hive.box('settings')
                             .put('initial_screen', '/registration');
                         Get.offAllNamed('/registration');
@@ -465,7 +469,9 @@ class _GradeCardState extends State<GradeCard> {
       ),
       child: InkWell(
         onTap: () {
-          Get.to(() => const MarkdownView());
+          if (!widget.isFinished) {
+            Get.to(() => const MarkdownView());
+          }
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

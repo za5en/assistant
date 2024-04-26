@@ -1,3 +1,4 @@
+import 'package:assistant/view/pages/markdown_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -81,11 +82,50 @@ class ANavigationDrawer extends StatelessWidget {
                     text: 'Файлы',
                     onTap: null,
                   ),
+                  const NavigationDrawerItem(
+                    icon: 'null',
+                    text: 'skill1',
+                    onTap: null,
+                  ),
                   NavigationDrawerItem(
                     icon: 'null',
                     text: 'filename.md',
+                    skill: false,
                     onTap: () {
-                      Get.back();
+                      Get.until((route) => Get.currentRoute == '/');
+                      Get.to(() => const MarkdownView(header: 'filename.md'));
+                    },
+                  ),
+                  NavigationDrawerItem(
+                    icon: 'null',
+                    text: 'filename1.md',
+                    skill: false,
+                    onTap: () {
+                      Get.until((route) => Get.currentRoute == '/');
+                      Get.to(() => const MarkdownView(header: 'filename1.md'));
+                    },
+                  ),
+                  const NavigationDrawerItem(
+                    icon: 'null',
+                    text: 'skill2',
+                    onTap: null,
+                  ),
+                  NavigationDrawerItem(
+                    icon: 'null',
+                    text: 'filename2.md',
+                    skill: false,
+                    onTap: () {
+                      Get.until((route) => Get.currentRoute == '/');
+                      Get.to(() => const MarkdownView(header: 'filename2.md'));
+                    },
+                  ),
+                  NavigationDrawerItem(
+                    icon: 'null',
+                    text: 'filename3.md',
+                    skill: false,
+                    onTap: () {
+                      Get.until((route) => Get.currentRoute == '/');
+                      Get.to(() => const MarkdownView(header: 'filename3.md'));
                     },
                   ),
                 ],
@@ -100,10 +140,11 @@ class ANavigationDrawer extends StatelessWidget {
 
 class NavigationDrawerItem extends StatelessWidget {
   const NavigationDrawerItem(
-      {Key? key, this.onTap, this.icon, required this.text})
+      {Key? key, this.onTap, this.icon, this.skill, required this.text})
       : super(key: key);
   final void Function()? onTap;
   final String? icon;
+  final bool? skill;
   final String text;
   @override
   Widget build(BuildContext context) {
@@ -121,7 +162,12 @@ class NavigationDrawerItem extends StatelessWidget {
                         color: Colors.black,
                       )
                     : null),
-            Text(text, style: Theme.of(context).textTheme.bodyLarge),
+            Padding(
+              padding: skill != null && !skill!
+                  ? const EdgeInsets.only(left: 20)
+                  : const EdgeInsets.all(0.0),
+              child: Text(text, style: Theme.of(context).textTheme.bodyLarge),
+            ),
           ],
         ),
       ),

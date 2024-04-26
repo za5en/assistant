@@ -5,7 +5,9 @@ import '../../widgets/a_app_bar.dart';
 import '../../widgets/a_svg_icon.dart';
 
 class MarkdownView extends StatefulWidget {
-  const MarkdownView({super.key});
+  const MarkdownView({super.key, this.header});
+
+  final String? header;
 
   @override
   State<MarkdownView> createState() => _MarkdownViewState();
@@ -19,8 +21,8 @@ class _MarkdownViewState extends State<MarkdownView> {
       drawer: const ANavigationDrawer(),
       backgroundColor: theme.colorScheme.background,
       appBar: AAppBar(
-        title:
-            Text('filename.md', style: Theme.of(context).textTheme.titleMedium),
+        title: Text(widget.header ?? 'filename.md',
+            style: Theme.of(context).textTheme.titleMedium),
         leading: Builder(builder: (context) {
           return InkWell(
             child: Container(

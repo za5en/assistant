@@ -11,7 +11,7 @@ import '../../widgets/a_app_bar.dart';
 import '../../widgets/a_pop_up_menu_data.dart';
 import '../../widgets/a_popup_menu.dart';
 import '../../widgets/a_svg_icon.dart';
-import 'skill_select.dart';
+// import 'skill_select.dart';
 // import 'settings.dart';
 
 class Profile extends StatefulWidget {
@@ -73,14 +73,28 @@ class ProfileState extends State<Profile> {
                 // ),
                 APopupMenuData(
                   child: Text(
+                    'Изменить имя',
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                  onTap: () {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.of(context).pushNamed('/change_name').then((_) {
+                        setState(() {
+                          Hive.box('user')
+                              .get('name', defaultValue: 'Noname User');
+                        });
+                      });
+                    });
+                  },
+                ),
+                APopupMenuData(
+                  child: Text(
                     'Выйти из аккаунта',
                     style: theme.textTheme.bodyLarge,
                   ),
                   onTap: () {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       afterDialog(context, 'Выйти из аккаунта?', () {
-                        print(Hive.box('user').get('password'));
-                        print(Hive.box('user').get('email'));
                         Navigator.pop(context);
                         // var userController = Get.find<UserController>();
                         // если аккаунт удаляем, то и все данные, что с ним связаны тоже надо чистить
@@ -94,8 +108,6 @@ class ProfileState extends State<Profile> {
                         // userController.logout();
                         HiveController.logout();
                         // HiveController.newAcc();
-                        print(Hive.box('user').get('password'));
-                        print(Hive.box('user').get('email'));
                         Hive.box('settings')
                             .put('initial_screen', '/registration');
                         Get.offAllNamed('/registration');
@@ -507,41 +519,42 @@ class _GradeCardState extends State<GradeCard> {
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 15.0),
-                  child: Visibility(
-                      visible: widget.isFinished ? false : true,
-                      child: InkWell(
-                        child: const Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            ASvgIcon(
-                                assetName: 'assets/images/skills_settings.svg'),
-                            Icon(
-                              Icons.settings,
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          //get info about skills
-                          Get.to(() => Skills(
-                                header: 'hard',
-                                specName: widget.specName,
-                                gradeName: widget.gradeName,
-                                skillsList: const [
-                                  'hard1',
-                                  'hard2',
-                                  'hard3',
-                                  'hard4',
-                                  'hard5'
-                                ],
-                                edit: true,
-                              ));
-                        },
-                      )),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(right: 15.0),
+                //   child: Visibility(
+                //       visible: widget.isFinished ? false : true,
+                //       child: InkWell(
+                //         child: const Stack(
+                //           alignment: Alignment.center,
+                //           children: [
+                //             ASvgIcon(
+                //                 assetName: 'assets/images/skills_settings.svg'),
+                //             Icon(
+                //               Icons.settings,
+                //               color: Colors.black,
+                //             ),
+                //           ],
+                //         ),
+                //         onTap: () {
+                //           //get info about skills
+                //           Get.to(() => Skills(
+                //                 header: 'hard',
+                //                 specName: widget.specName,
+                //                 gradeName: widget.gradeName,
+                //                 skillsList: const [
+                //                   'hard1',
+                //                   'hard2',
+                //                   'hard3',
+                //                   'hard4',
+                //                   'hard5'
+                //                 ],
+                //                 edit: true,
+                //               ));
+                //         },
+                //       )),
+                // ),
                 Padding(
                   padding: const EdgeInsets.only(right: 15.0),
                   child: InkWell(

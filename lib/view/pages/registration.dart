@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
 import '../../controllers/hive_controller.dart';
+import '../../data/competency.dart';
+import '../../data/grade.dart';
 import '../../widgets/a_elevated_button.dart';
 
 class Registration extends StatefulWidget {
@@ -266,11 +268,25 @@ class _RegistrationState extends State<Registration> {
                       await Hive.box('user').put('name', name);
                       await Hive.box('user').put('password', password);
                       //!
-                      await Hive.box('user').put('isLogged', true);
-                      await Hive.box('settings')
-                          .put('initial_screen', '/basic_competency');
+                      // await Hive.box('user').put('isLogged', true);
+                      // Grade basicGrade = Grade(
+                      //     gradeName: 'Java',
+                      //     specName: 'middle',
+                      //     isFinished: true,
+                      //     id: 1,
+                      //     gradeId: 1);
+                      // await Hive.box<Grade>('grades').put('basic', basicGrade);
+                      // HiveList<Grade> grades =
+                      //     HiveList(Hive.box<Grade>('grades'));
+                      // grades.add(Hive.box<Grade>('grades').get('basic')!);
+                      // Competency comp = Competency();
+                      // comp.grades = grades;
+                      // await Hive.box<Competency>('competencies').add(comp);
+                      // await Hive.box('settings').put('initial_screen', '/');
+                      // Get.offNamed('/');
+                      await Hive.box('settings').put('initial_screen', '/');
                       Get.back();
-                      Get.offAllNamed('/basic_competency');
+                      Get.offAllNamed('/');
                       // Get.back();
                       // Get.to(() => const EmailConfirm());
                       // } else {

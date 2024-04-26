@@ -8,11 +8,11 @@ class ApiClient {
   const ApiClient();
 
   Future<http.Response> getRequest(
-      {required String path, bool addDiaryIp = true}) async {
+      {required String path, bool addIp = true}) async {
     try {
-      final url = Uri.parse((addDiaryIp ? ip : '') + path);
+      final url = Uri.parse((addIp ? ip : '') + path);
       final response = await client.get(url);
-      log((addDiaryIp ? ip : '') + path);
+      log((addIp ? ip : '') + path);
       if (response.body.length < 10000) {
         log(response.body);
       } else {
@@ -32,8 +32,8 @@ class ApiClient {
   }
 
   Future<http.Response> postRequest(
-      {required String path, Object? body, bool addDiaryIp = true}) async {
-    final url = Uri.parse((addDiaryIp ? ip : '') + path);
+      {required String path, Object? body, bool addIp = true}) async {
+    final url = Uri.parse((addIp ? ip : '') + path);
     // try {
     var response = await client.post(
       url,

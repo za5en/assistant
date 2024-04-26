@@ -1,8 +1,9 @@
-import 'package:assistant/view/pages/skill_select.dart';
+// import 'package:assistant/view/pages/skill_select.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
+import '../../data/grade.dart';
 import '../../widgets/a_elevated_button.dart';
 import '../../widgets/a_pop_up_menu_data.dart';
 import '../../widgets/a_svg_icon.dart';
@@ -137,18 +138,56 @@ class _NewCompetencyState extends State<NewCompetency> {
                 onPressed: () async {
                   if (spec != 'Выбор специализации') {
                     //api method set def spec n grade
-                    Get.off(() => Skills(
-                          header: 'hard',
-                          specName: spec,
-                          skillsList: const [
-                            'hard1',
-                            'hard2',
-                            'hard3',
-                            'hard4',
-                            'hard5'
-                          ],
-                          edit: false,
-                        ));
+                    // Get.off(() => Skills(
+                    //       header: 'hard',
+                    //       specName: spec,
+                    //       skillsList: const [
+                    //         'hard1',
+                    //         'hard2',
+                    //         'hard3',
+                    //         'hard4',
+                    //         'hard5'
+                    //       ],
+                    //       edit: false,
+                    //     ));
+                    var getGrade = Hive.box<Grade>('grades')
+                        .values
+                        .where((element) => element.specName == spec);
+                    var gradeId = -1;
+                    var gradeName = '';
+                    if (getGrade.isNotEmpty) {
+                      gradeId = getGrade.first.gradeId + 1;
+                      if (gradeId == 5) {
+                        Get.until((route) => Get.currentRoute == '/');
+                        Get.snackbar(
+                            'Ошибка', 'Вы уже достигли максимального грейда');
+                      }
+                      switch (gradeId) {
+                        case 1:
+                          gradeName = 'middle';
+                          break;
+                        case 2:
+                          gradeName = 'senior';
+                          break;
+                        case 3:
+                          gradeName = 'lead';
+                          break;
+                        case 4:
+                          gradeName = 'boss';
+                          break;
+                      }
+                    } else {
+                      gradeId = 0;
+                      gradeName = 'junior';
+                    }
+                    Grade grade = Grade(
+                        gradeName: gradeName,
+                        specName: spec,
+                        isFinished: false,
+                        id: Hive.box<Grade>('grades').length,
+                        gradeId: gradeId);
+                    Hive.box<Grade>('grades').add(grade);
+                    Get.offNamed('/markdown');
                   } else {
                     showAlertDialog(
                         context, 'Необходимо указать специализацию');

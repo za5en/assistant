@@ -9,6 +9,8 @@ import 'package:assistant/view/pages/skill_select.dart';
 import 'package:assistant/view/pages/testing_page.dart';
 import 'package:flutter/material.dart';
 
+import 'widgets/a_change_name.dart';
+
 class AppRouter {
   const AppRouter();
   Route onGenerateRoute(settings) {
@@ -16,18 +18,24 @@ class AppRouter {
       case '/':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const Profile());
-      case '/registration':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const Registration());
       case '/basic_competency':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const BasicCompetency());
-      case '/current_competency':
+      case '/change_name':
         return MaterialPageRoute(
-            settings: settings, builder: (_) => const CurrentCompetency());
+            settings: settings, builder: (_) => const ChangeName());
       case '/competency':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const NewCompetency());
+      case '/current_competency':
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const CurrentCompetency());
+      case '/markdown':
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const MarkdownView());
+      case '/registration':
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const Registration());
       case '/settings':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const Settings());
@@ -40,9 +48,6 @@ class AppRouter {
                   skillsList: [],
                   edit: false,
                 ));
-      case '/markdown':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const MarkdownView());
       case '/testing':
         return MaterialPageRoute(
             settings: settings,

@@ -249,9 +249,14 @@ class _TestingState extends State<Testing> {
 
                                   if (mounted) {
                                     Get.back(); //add resultDialog
+                                    if (rights < 4) {
+                                      validDialog(context,
+                                          'Среди ваших ответов есть неправильные. Тест не пройден, попробуйте ещё раз');
+                                    }
                                   }
                                 } else {
-                                  validDialog(context);
+                                  validDialog(context,
+                                      'Чтобы завершить тест, нужно ответить на все вопросы');
                                 }
                               },
                               style:
@@ -274,7 +279,7 @@ class _TestingState extends State<Testing> {
     );
   }
 
-  validDialog(context) {
+  validDialog(context, text) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -283,7 +288,7 @@ class _TestingState extends State<Testing> {
             title: Column(
               children: [
                 Text(
-                  'Чтобы завершить тест, нужно ответить на все вопросы',
+                  text,
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme

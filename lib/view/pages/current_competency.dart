@@ -22,12 +22,12 @@ class _CurrentCompetencyState extends State<CurrentCompetency> {
     var competencies = Hive.box<Competency>('competencies').values.toList();
     var searchList = [];
     for (var i = 0; i < competencies.length; i++) {
-      var grades = competencies[i].grades;
-      searchList.addAll(grades!
+      // var grades =
+      searchList.addAll(competencies[i]
+          .grades!
           .where((element) =>
               element.specName.toLowerCase().contains(query.toLowerCase()))
           .toList());
-      print(query);
     }
     return Scaffold(
         backgroundColor: theme.colorScheme.background,
@@ -66,21 +66,15 @@ class _CurrentCompetencyState extends State<CurrentCompetency> {
                     itemCount: searchList.length,
                     itemBuilder: (context, index) {
                       return Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: 30.0, left: 30.0, right: 30.0),
-                          child: Column(
-                            children: searchList
-                                .where((element) => element.isFinished == true)
-                                .map(
-                                  (e) => InkWell(
-                                    child: CurrentGradeCard(
-                                        gradeName: e.gradeName,
-                                        specName: e.specName),
-                                    onTap: () {}, //! добавить что-нибудь
-                                  ),
-                                )
-                                .toList(),
-                          ));
+                        padding: const EdgeInsets.only(
+                            bottom: 30.0, left: 30.0, right: 30.0),
+                        child: InkWell(
+                          child: CurrentGradeCard(
+                              gradeName: searchList[index].gradeName,
+                              specName: searchList[index].specName),
+                          onTap: () {}, //! добавить что-нибудь
+                        ),
+                      );
                     });
               })
         ])));

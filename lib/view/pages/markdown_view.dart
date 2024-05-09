@@ -21,7 +21,7 @@ class _MarkdownViewState extends State<MarkdownView> {
       drawer: const ANavigationDrawer(),
       backgroundColor: theme.colorScheme.background,
       appBar: AAppBar(
-        title: Text(widget.header ?? 'filename.md',
+        title: Text(widget.header ?? 'Выберите файл',
             style: Theme.of(context).textTheme.titleMedium),
         leading: Builder(builder: (context) {
           return InkWell(

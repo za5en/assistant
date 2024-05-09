@@ -1,12 +1,12 @@
 import 'package:assistant/view/pages/current_competency.dart';
 import 'package:assistant/view/pages/markdown_view.dart';
 import 'package:assistant/view/pages/testing_page.dart';
+import 'package:assistant/widgets/search_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import '../../controllers/hive_controller.dart';
 import '../../data/grade.dart';
-import '../../widgets/a_app_bar.dart';
 // import '../../widgets/a_image_picker.dart';
 import '../../widgets/a_pop_up_menu_data.dart';
 import '../../widgets/a_popup_menu.dart';
@@ -23,6 +23,7 @@ class Profile extends StatefulWidget {
 
 class ProfileState extends State<Profile> {
   bool showLetters = true;
+  var query = '';
   @override
   Widget build(BuildContext context) {
     // final controller = Get.find<UserController>();
@@ -35,6 +36,7 @@ class ProfileState extends State<Profile> {
     if (nameWords.length > 1) {
       nameLetters += nameWords[1][0];
     }
+    List<Grade> searchList = [];
     // if (controller.user.imagePath != 'assets/images/avatar.png' ||
     //     (Hive.box('user').get('isLogged') == null ||
     //         (Hive.box('user').get('isLogged') != null &&
@@ -43,9 +45,16 @@ class ProfileState extends State<Profile> {
     // }
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: AAppBar(
-        backgroundColor: theme.colorScheme.secondaryContainer,
-        size: 50,
+      appBar: SearchAppBar(
+        color: theme.colorScheme.secondaryContainer,
+        size: 56,
+        searchPos: true,
+        onSearchChanged: (text) {
+          setState(() => query = text);
+        },
+        onSearchReset: () {
+          setState(() => query = '');
+        },
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
@@ -303,13 +312,18 @@ class ProfileState extends State<Profile> {
                                     // }
                                     grades.addAll(
                                         Hive.box<Grade>('grades').values);
+                                    searchList = grades
+                                        .where((element) => element.specName
+                                            .toLowerCase()
+                                            .contains(query.toLowerCase()))
+                                        .toList();
                                     // return SizedBox(
                                     //   height: h * 0.9,
                                     return Column(
                                       children: [
                                         Expanded(
                                           child: GradesBlock(
-                                            grades: grades,
+                                            grades: searchList,
                                           ),
                                         ),
                                       ],
@@ -497,7 +511,7 @@ class _GradeCardState extends State<GradeCard> {
                   Padding(
                     padding: EdgeInsets.only(top: h * 0.02, left: 15.0),
                     child: Text(
-                      widget.gradeName,
+                      widget.specName,
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 26,
@@ -508,7 +522,7 @@ class _GradeCardState extends State<GradeCard> {
                     padding: EdgeInsets.only(
                         top: h * 0.01, bottom: h * 0.01, left: 15.0),
                     child: Text(
-                      widget.specName,
+                      widget.gradeName,
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
@@ -613,24 +627,24 @@ class _GradeCardState extends State<GradeCard> {
                               hiveKey: widget.hiveKey,
                               questionAmount: 4,
                               testQuestions: const [
-                                'Вопрос 1',
-                                'Вопрос 2',
-                                'Вопрос 3',
-                                'Вопрос 4'
+                                'Какого типа наследования не существует?',
+                                'Основные принципы ООП',
+                                'Алгоритмическая сложность для чтения в Dictionary',
+                                'Два ключевых оператора для работы с асинхронными вызовами'
                               ],
                               testAnswers: const [
-                                'Ответ 1',
-                                'Ответ 2',
-                                'Ответ 3',
-                                'Ответ 1',
-                                'Ответ 2',
-                                'Ответ 3',
-                                'Ответ 1',
-                                'Ответ 2',
-                                'Ответ 3',
-                                'Ответ 1',
-                                'Ответ 2',
-                                'Ответ 3'
+                                'Одноуровневое',
+                                'Двухуровневое',
+                                'Многоуровневое',
+                                'инкапсуляция, наследование, полиморфизм и модуляция',
+                                'инкапсуляция, наследование, полиморфизм и абстракция',
+                                'конъюнкция, дизъюнкция, полиморфизм и импликация',
+                                'O(n)',
+                                'O(1)',
+                                'O(log(n))',
+                                'await в заголовке метода, async при вызове метода',
+                                'async в заголовке метода, await при вызове метода',
+                                'await в заголовке, await и async при вызове'
                               ],
                               testRight: const [
                                 1,

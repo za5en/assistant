@@ -84,48 +84,51 @@ class ANavigationDrawer extends StatelessWidget {
                   ),
                   const NavigationDrawerItem(
                     icon: 'null',
-                    text: 'skill1',
+                    text: 'ООП',
                     onTap: null,
                   ),
                   NavigationDrawerItem(
                     icon: 'null',
-                    text: 'filename.md',
+                    text: 'ООП_Основы.md',
                     skill: false,
                     onTap: () {
                       Get.until((route) => Get.currentRoute == '/');
-                      Get.to(() => const MarkdownView(header: 'filename.md'));
+                      Get.to(() => const MarkdownView(header: 'ООП_Основы.md'));
                     },
                   ),
                   NavigationDrawerItem(
                     icon: 'null',
-                    text: 'filename1.md',
+                    text: 'ООП_Принципы.md',
                     skill: false,
                     onTap: () {
                       Get.until((route) => Get.currentRoute == '/');
-                      Get.to(() => const MarkdownView(header: 'filename1.md'));
+                      Get.to(
+                          () => const MarkdownView(header: 'ООП_Принципы.md'));
                     },
                   ),
                   const NavigationDrawerItem(
                     icon: 'null',
-                    text: 'skill2',
+                    text: 'Синтаксис',
                     onTap: null,
                   ),
                   NavigationDrawerItem(
                     icon: 'null',
-                    text: 'filename2.md',
+                    text: 'Синтаксис_C#.md',
                     skill: false,
                     onTap: () {
                       Get.until((route) => Get.currentRoute == '/');
-                      Get.to(() => const MarkdownView(header: 'filename2.md'));
+                      Get.to(
+                          () => const MarkdownView(header: 'Синтаксис_C#.md'));
                     },
                   ),
                   NavigationDrawerItem(
                     icon: 'null',
-                    text: 'filename3.md',
+                    text: 'Синтаксис_С#_доп.md',
                     skill: false,
                     onTap: () {
                       Get.until((route) => Get.currentRoute == '/');
-                      Get.to(() => const MarkdownView(header: 'filename3.md'));
+                      Get.to(() =>
+                          const MarkdownView(header: 'Синтаксис_С#_доп.md'));
                     },
                   ),
                 ],

@@ -248,10 +248,13 @@ class _TestingState extends State<Testing> {
                                   // }
 
                                   if (mounted) {
-                                    Get.back(); //add resultDialog
+                                    Get.back();
                                     if (rights < 4) {
                                       validDialog(context,
                                           'Среди ваших ответов есть неправильные. Тест не пройден, попробуйте ещё раз');
+                                    } else {
+                                      validDialog(
+                                          context, 'Тест успешно пройден!');
                                     }
                                   }
                                 } else {

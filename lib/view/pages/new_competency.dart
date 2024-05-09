@@ -16,7 +16,7 @@ class NewCompetency extends StatefulWidget {
 }
 
 class _NewCompetencyState extends State<NewCompetency> {
-  var spec = 'Выбор специализации';
+  var spec = 'Выбор компетенции';
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -93,7 +93,7 @@ class _NewCompetencyState extends State<NewCompetency> {
                               'C++',
                               'DevOps',
                               'Data analyst',
-                              'Testing'
+                              'Тестирование'
                             ];
                             Hive.box('user').put('basic', specList[value]);
                             setState(() {
@@ -123,7 +123,7 @@ class _NewCompetencyState extends State<NewCompetency> {
                                   style: Theme.of(context).textTheme.bodyLarge),
                             ),
                             APopupMenuData(
-                              child: Text('Testing',
+                              child: Text('Тестирование',
                                   style: Theme.of(context).textTheme.bodyLarge),
                             ),
                           ],
@@ -136,7 +136,7 @@ class _NewCompetencyState extends State<NewCompetency> {
               AElevatedButtonExtended(
                 text: 'Ок',
                 onPressed: () async {
-                  if (spec != 'Выбор специализации') {
+                  if (spec != 'Выбор компетенции') {
                     //api method set def spec n grade
                     // Get.off(() => Skills(
                     //       header: 'hard',
@@ -164,21 +164,21 @@ class _NewCompetencyState extends State<NewCompetency> {
                       }
                       switch (gradeId) {
                         case 1:
-                          gradeName = 'middle';
+                          gradeName = 'Уровень 1';
                           break;
                         case 2:
-                          gradeName = 'senior';
+                          gradeName = 'Уровень 2';
                           break;
                         case 3:
-                          gradeName = 'lead';
+                          gradeName = 'Уровень 3';
                           break;
                         case 4:
-                          gradeName = 'boss';
+                          gradeName = 'Уровень Босс';
                           break;
                       }
                     } else {
                       gradeId = 0;
-                      gradeName = 'junior';
+                      gradeName = 'Уровень 0';
                     }
                     Grade grade = Grade(
                         gradeName: gradeName,

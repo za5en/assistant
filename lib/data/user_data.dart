@@ -3,6 +3,8 @@ class User {
     required this.id,
     required this.email,
     required this.name,
+    required this.surname,
+    required this.patronymic,
     required this.currency,
     required this.isEmailConfirmed,
     this.isSubscribed,
@@ -16,6 +18,8 @@ class User {
   int id;
   String? email;
   String? name;
+  String? surname;
+  String? patronymic;
   int? currency;
   List<String>? devices;
   bool? isSubscribed;
@@ -30,6 +34,8 @@ class User {
         id: json["id"],
         email: json["email"],
         name: json["name"],
+        surname: json["surname"],
+        patronymic: json["patronymic"],
         currency: json["currency"] == '' ? 0 : json["currency"],
         imagePath: json["photo"],
         isEmailConfirmed: (json["isEmailConfirmed"] ?? '') == ''

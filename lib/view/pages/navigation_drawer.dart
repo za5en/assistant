@@ -10,6 +10,11 @@ class ANavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool showLetters = true;
+    final String name = Hive.box('user').get('name', defaultValue: 'Имя');
+    final String surname =
+        Hive.box('user').get('surname', defaultValue: 'Фамилия');
+    String nameLetters = name[0] + surname[0];
     final theme = Theme.of(context);
     return /*SafeArea(
       child:*/
@@ -51,24 +56,55 @@ class ANavigationDrawer extends StatelessWidget {
                           //         'assets/images/avatar.png')
                           Padding(
                             padding: const EdgeInsets.only(right: 20),
-                            child: CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .tertiaryContainer,
+                            child: Visibility(
+                              visible: showLetters,
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .tertiaryContainer,
+                                    ),
+                                  ),
+                                  Positioned.fill(
+                                    child: Center(
+                                      child: Text(nameLetters,
+                                          style: theme.textTheme.displayLarge
+                                              ?.copyWith(fontSize: 17)),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            //   )
-                            // else
-                            //   Padding(
-                            //     padding: const EdgeInsets.only(right: 30),
-                            //     child: Avatar(userController: controller),
                           ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(right: 20),
+                          //   child: CircleAvatar(
+                          //     radius: 30,
+                          //     backgroundColor: Theme.of(context)
+                          //         .colorScheme
+                          //         .tertiaryContainer,
+                          //   ),
+                          //   //   )
+                          //   // else
+                          //   //   Padding(
+                          //   //     padding: const EdgeInsets.only(right: 30),
+                          //   //     child: Avatar(userController: controller),
+                          // ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                Hive.box('user')
-                                    .get('name', defaultValue: 'name surname'),
+                                Hive.box('user').get('surname',
+                                        defaultValue: 'Фамилия') +
+                                    '\n' +
+                                    Hive.box('user')
+                                        .get('name', defaultValue: 'Имя') +
+                                    '\n' +
+                                    Hive.box('user').get('patronymic',
+                                        defaultValue: 'Отчество'),
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                             ],

@@ -29,13 +29,10 @@ class ProfileState extends State<Profile> {
     // final controller = Get.find<UserController>();
     // double h = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
-    final String name =
-        Hive.box('user').get('name', defaultValue: 'Имя Фамилия');
-    final List nameWords = name.split(' ');
-    String nameLetters = nameWords[0][0];
-    if (nameWords.length > 1) {
-      nameLetters += nameWords[1][0];
-    }
+    final String name = Hive.box('user').get('name', defaultValue: 'Имя');
+    final String surname =
+        Hive.box('user').get('surname', defaultValue: 'Фамилия');
+    String nameLetters = name[0] + surname[0];
     List<Grade> searchList = [];
     // if (controller.user.imagePath != 'assets/images/avatar.png' ||
     //     (Hive.box('user').get('isLogged') == null ||
@@ -272,7 +269,13 @@ class ProfileState extends State<Profile> {
                           padding: const EdgeInsets.only(top: 15, bottom: 25),
                           child: Text(
                             Hive.box('user')
-                                .get('name', defaultValue: 'Имя Фамилия'),
+                                    .get('surname', defaultValue: 'Фамилия') +
+                                ' ' +
+                                Hive.box('user')
+                                    .get('name', defaultValue: 'Имя') +
+                                ' ' +
+                                Hive.box('user').get('patronymic',
+                                    defaultValue: 'Отчество'),
                             style: theme.textTheme.titleMedium,
                           ),
                         ),

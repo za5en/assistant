@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
 import '../../controllers/hive_controller.dart';
-import '../../data/competency.dart';
-import '../../data/grade.dart';
+// import '../../data/competency.dart';
+// import '../../data/grade.dart';
 import '../../widgets/a_elevated_button.dart';
 
 class Registration extends StatefulWidget {
@@ -16,6 +16,8 @@ class Registration extends StatefulWidget {
 
 class _RegistrationState extends State<Registration> {
   var name = '';
+  var surname = '';
+  var patronymic = '';
   var email = '';
   var password = '';
   var hasAccount = true;
@@ -35,7 +37,7 @@ class _RegistrationState extends State<Registration> {
                 padding: EdgeInsets.only(
                   bottom: hasAccount
                       ? MediaQuery.of(context).size.height / 3
-                      : MediaQuery.of(context).size.height / 2.625,
+                      : MediaQuery.of(context).size.height / 3.525,
                   left: w * 0.133,
                   right: w * 0.133,
                 ),
@@ -138,6 +140,26 @@ class _RegistrationState extends State<Registration> {
                         Visibility(
                           visible: !hasAccount,
                           child: RegistrationTextField(
+                            text: 'Фамилия',
+                            onChanged: (p0) => surname = p0,
+                            enabled: true,
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Это поле должно быть заполнено';
+                              }
+                              if (value.length < 2) {
+                                return 'Фамилия должна содержать 2 или больше символов';
+                              }
+                              if (!value.isValidName()) {
+                                return 'Фамилия содержит некорректные символы';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: !hasAccount,
+                          child: RegistrationTextField(
                             text: 'Имя',
                             onChanged: (p0) => name = p0,
                             enabled: true,
@@ -145,11 +167,31 @@ class _RegistrationState extends State<Registration> {
                               if (value == null) {
                                 return 'Это поле должно быть заполнено';
                               }
-                              if (value.length < 5) {
-                                return 'Имя должно содержать 5 или больше символов';
+                              if (value.length < 2) {
+                                return 'Имя должно содержать 2 или больше символов';
                               }
                               if (!value.isValidName()) {
                                 return 'Имя содержит некорректные символы';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: !hasAccount,
+                          child: RegistrationTextField(
+                            text: 'Отчество',
+                            onChanged: (p0) => patronymic = p0,
+                            enabled: true,
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Это поле должно быть заполнено';
+                              }
+                              if (value.length < 2) {
+                                return 'Отчество должно содержать 2 или больше символов';
+                              }
+                              if (!value.isValidName()) {
+                                return 'Отчество содержит некорректные символы';
                               }
                               return null;
                             },
@@ -242,6 +284,8 @@ class _RegistrationState extends State<Registration> {
                   } else {
                     if (validateEmail(email) == null &&
                         validateName(name) == null &&
+                        validateSurname(surname) == null &&
+                        validatePatronymic(patronymic) == null &&
                         validatePassword(password) == null) {
                       showDialog(
                         barrierDismissible: false,
@@ -266,6 +310,8 @@ class _RegistrationState extends State<Registration> {
                       //! потом убрать
                       await Hive.box('user').put('email', email);
                       await Hive.box('user').put('name', name);
+                      await Hive.box('user').put('surname', surname);
+                      await Hive.box('user').put('patronymic', patronymic);
                       await Hive.box('user').put('password', password);
                       //!
                       // await Hive.box('user').put('isLogged', true);
@@ -308,8 +354,14 @@ class _RegistrationState extends State<Registration> {
                       } else if (validatePassword(password) != null) {
                         showAlertDialog(
                             context, '${validatePassword(password)}\n');
-                      } else {
+                      } else if (validateName(name) != null) {
                         showAlertDialog(context, '${validateName(name)}\n');
+                      } else if (validateSurname(name) != null) {
+                        showAlertDialog(
+                            context, '${validateSurname(surname)}\n');
+                      } else {
+                        showAlertDialog(
+                            context, '${validatePatronymic(patronymic)}\n');
                       }
                     }
                   }
@@ -460,10 +512,13 @@ extension EmailValidator on String {
 
 String? validateName(String? name) {
   if (name == null || name.isEmpty) {
-    return 'Придумайте имя';
+    return 'Не указано имя';
   }
   if (name.length > 50) {
     return 'Имя должно содержать менее 50 символов';
+  }
+  if (name.length < 2) {
+    return 'Имя должно содержать больше 1 символа';
   }
   if (!name.isValidName()) {
     return 'Имя содержит некорректные символы';
@@ -471,9 +526,41 @@ String? validateName(String? name) {
   return null;
 }
 
+String? validateSurname(String? name) {
+  if (name == null || name.isEmpty) {
+    return 'Не указана фамилия';
+  }
+  if (name.length > 50) {
+    return 'Фамилия должна содержать менее 50 символов';
+  }
+  if (name.length < 2) {
+    return 'Фамилия должна содержать больше 1 символа';
+  }
+  if (!name.isValidName()) {
+    return 'Фамилия содержит некорректные символы';
+  }
+  return null;
+}
+
+String? validatePatronymic(String? name) {
+  if (name == null || name.isEmpty) {
+    return 'Не указано отчество';
+  }
+  if (name.length > 50) {
+    return 'Отчество должно содержать менее 50 символов';
+  }
+  if (name.length < 2) {
+    return 'Отчество должно содержать больше 1 символа';
+  }
+  if (!name.isValidName()) {
+    return 'Отчество содержит некорректные символы';
+  }
+  return null;
+}
+
 String? validateEmail(String? email) {
   if (email == null) {
-    return 'Это поле должно быть заполнено';
+    return 'Не указан email';
   }
   if (!email.isValidEmail()) {
     return 'Email указан неверно';
@@ -483,7 +570,7 @@ String? validateEmail(String? email) {
 
 String? validatePassword(String? password) {
   if (password == null) {
-    return 'Это поле должно быть заполнено';
+    return 'Не указан пароль';
   }
   if (password.length < 6) {
     return 'Пароль должен содержать как минимум 6 символов';

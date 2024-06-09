@@ -79,7 +79,7 @@ class ProfileState extends State<Profile> {
                 // ),
                 APopupMenuData(
                   child: Text(
-                    'Изменить имя',
+                    'Изменить данные',
                     style: theme.textTheme.bodyLarge,
                   ),
                   onTap: () {

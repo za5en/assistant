@@ -31,9 +31,12 @@ class ChangeNameState extends State<ChangeName> {
               Container(),
               Column(
                 children: [
-                  Text(
-                    'Новое имя',
-                    style: theme.textTheme.headlineLarge,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: Text(
+                      'Новые данные',
+                      style: theme.textTheme.headlineLarge,
+                    ),
                   ),
                   RegistrationTextField(
                     text: 'Фамилия',

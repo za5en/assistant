@@ -6,7 +6,9 @@ import 'package:hive/hive.dart';
 import '../../widgets/a_svg_icon.dart';
 
 class ANavigationDrawer extends StatelessWidget {
-  const ANavigationDrawer({super.key});
+  const ANavigationDrawer({super.key, this.compName});
+
+  final String? compName;
 
   @override
   Widget build(BuildContext context) {

@@ -499,7 +499,9 @@ class _GradeCardState extends State<GradeCard> {
       child: InkWell(
         onTap: () {
           if (!widget.isFinished) {
-            Get.to(() => const MarkdownView());
+            Get.to(() => MarkdownView(
+                  compName: widget.specName,
+                ));
           }
         },
         child: Row(

@@ -29,12 +29,14 @@ class Testing extends StatefulWidget {
 
 class _TestingState extends State<Testing> {
   List<bool> isActive = [false];
+  final stopwatch = Stopwatch();
 
   @override
   void initState() {
     for (var i = 0; i < widget.questionAmount * 3 - 1; i++) {
       isActive.add(false);
     }
+    stopwatch.start();
     super.initState();
   }
 
@@ -91,12 +93,11 @@ class _TestingState extends State<Testing> {
                                   ElevatedButton(
                                     style: ButtonStyle(
                                       minimumSize: MaterialStateProperty.all(
-                                          Size(
-                                              MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.9,
-                                              40)),
+                                        Size(
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
+                                            40),
+                                      ),
                                       backgroundColor: isActive[index * 3]
                                           ? Theme.of(context)
                                               .elevatedButtonTheme
@@ -248,6 +249,7 @@ class _TestingState extends State<Testing> {
                                   // }
 
                                   if (mounted) {
+                                    stopwatch.stop();
                                     Get.back();
                                     if (rights < 4) {
                                       validDialog(context,

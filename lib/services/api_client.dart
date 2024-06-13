@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 class ApiClient {
-  static const ip = ''; //! добавить
+  static const ip = 'http://192.168.31.93:8000/api/';
   static final client = http.Client();
   const ApiClient();
 
@@ -36,6 +36,50 @@ class ApiClient {
     final url = Uri.parse((addIp ? ip : '') + path);
     // try {
     var response = await client.post(
+      url,
+      body: body,
+    );
+    log(ip + path);
+    log(response.body);
+    log(response.request.toString());
+    switch (response.statusCode) {
+      case 200:
+        return response;
+      default:
+        throw Exception(response.reasonPhrase);
+    }
+    // } catch (e) {
+    //   throw Exception(e);
+    // }
+  }
+
+  Future<http.Response> patchRequest(
+      {required String path, Object? body, bool addIp = true}) async {
+    final url = Uri.parse((addIp ? ip : '') + path);
+    // try {
+    var response = await client.patch(
+      url,
+      body: body,
+    );
+    log(ip + path);
+    log(response.body);
+    log(response.request.toString());
+    switch (response.statusCode) {
+      case 200:
+        return response;
+      default:
+        throw Exception(response.reasonPhrase);
+    }
+    // } catch (e) {
+    //   throw Exception(e);
+    // }
+  }
+
+  Future<http.Response> deleteRequest(
+      {required String path, Object? body, bool addIp = true}) async {
+    final url = Uri.parse((addIp ? ip : '') + path);
+    // try {
+    var response = await client.delete(
       url,
       body: body,
     );

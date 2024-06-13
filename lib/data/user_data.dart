@@ -1,49 +1,95 @@
 class User {
   User({
     required this.id,
-    required this.email,
     required this.name,
     required this.surname,
     required this.patronymic,
-    required this.currency,
-    required this.isEmailConfirmed,
-    this.isSubscribed,
-    this.imagePath,
-    this.password,
-    required this.groups,
-    this.invites,
-    this.premium,
+    required this.fullName,
+    required this.email,
+    required this.userCompetencies,
   });
 
   int id;
-  String? email;
-  String? name;
-  String? surname;
-  String? patronymic;
-  int? currency;
-  List<String>? devices;
-  bool? isSubscribed;
-  String? imagePath;
-  String? password;
-  bool isEmailConfirmed;
-  Map groups;
-  Map? invites;
-  bool? premium;
+  String name;
+  String surname;
+  String patronymic;
+  String fullName;
+  String email;
+  List<UserCompetency> userCompetencies;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
-        email: json["email"],
         name: json["name"],
         surname: json["surname"],
         patronymic: json["patronymic"],
-        currency: json["currency"] == '' ? 0 : json["currency"],
-        imagePath: json["photo"],
-        isEmailConfirmed: (json["isEmailConfirmed"] ?? '') == ''
-            ? false
-            : json["isEmailConfirmed"],
-        //isSubscribed: json["subscription"],
-        groups: json["groups"] == '' ? {} : json["groups"],
-        invites: json["invites"],
-        premium: json["premium"],
-      )..devices = List.from(json['syncDevices'] ?? []);
+        fullName: json["fullName"],
+        email: json["email"],
+        userCompetencies: List.from(json["userCompetencies"] ?? []),
+      );
+}
+
+class UserCompetency {
+  UserCompetency({
+    required this.id,
+    required this.name,
+    required this.priority,
+    required this.level,
+    required this.testTimeMinutes,
+    required this.passThreshold,
+    required this.completed,
+    required this.testAttempts,
+  });
+
+  int id;
+  String name;
+  int priority;
+  String level;
+  int testTimeMinutes;
+  int passThreshold;
+  bool completed;
+  List<TestAttempt> testAttempts;
+
+  factory UserCompetency.fromJson(Map<String, dynamic> json) => UserCompetency(
+        id: json["id"],
+        name: json["name"],
+        priority: json["priority"],
+        level: json["level"],
+        testTimeMinutes: json["testTimeMinutes"],
+        passThreshold: json["passThreshold"],
+        completed: json["completed"],
+        testAttempts: List.from(json["testAttempts"] ?? []),
+      );
+}
+
+class TestAttempt {
+  TestAttempt({
+    required this.solutionDuration,
+    required this.uploadedAt,
+    required this.answers,
+  });
+
+  int solutionDuration;
+  String uploadedAt;
+  List<Answer> answers;
+
+  factory TestAttempt.fromJson(Map<String, dynamic> json) => TestAttempt(
+        solutionDuration: json["solutionDuration"],
+        uploadedAt: json["uploadedAt"],
+        answers: List.from(json["answers"] ?? []),
+      );
+}
+
+class Answer {
+  Answer({
+    required this.option,
+    required this.isCorrect,
+  });
+
+  String option;
+  bool isCorrect;
+
+  factory Answer.fromJson(Map<String, dynamic> json) => Answer(
+        option: json["option"],
+        isCorrect: json["isCorrect"],
+      );
 }

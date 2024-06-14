@@ -120,4 +120,12 @@ class UserController extends GetxController {
       _userData = User.fromJson(data.data);
     }
   }
+
+  Future<void> getFile(String dir, String fileName) async {
+    var response = await _remoteUserServices.getFile(dir, fileName);
+    var data = Data.fromJson(response.body);
+    if (data.isSuccess) {
+      _userData = User.fromJson(data.data);
+    }
+  }
 }

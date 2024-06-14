@@ -14,8 +14,9 @@ class RemoteUserServices {
     String patronymic,
     String email,
   ) async {
-    var response = await _apiClient.postRequest(
+    var response = await _apiClient.request(
       path: '/users',
+      reqType: 'post',
       body: {
         "name": name,
         "surname": surname,
@@ -42,8 +43,9 @@ class RemoteUserServices {
     String patronymic,
     String email,
   ) async {
-    var response = await _apiClient.patchRequest(
+    var response = await _apiClient.request(
       path: '/users/$userId',
+      reqType: 'patch',
       body: {
         "name": name,
         "surname": surname,
@@ -56,8 +58,9 @@ class RemoteUserServices {
   }
 
   Future<http.Response> deleteUser(int userId) async {
-    var response = await _apiClient.deleteRequest(
+    var response = await _apiClient.request(
       path: '/users/$userId',
+      reqType: 'delete',
     );
     log(response.body);
     return response;
@@ -67,8 +70,9 @@ class RemoteUserServices {
     int userId,
     int compId,
   ) async {
-    var response = await _apiClient.postRequest(
+    var response = await _apiClient.request(
       path: '/users/$userId/competencies?competencyId=$compId',
+      reqType: 'post',
     );
     log(response.body);
     return response;
@@ -76,7 +80,7 @@ class RemoteUserServices {
 
   Future<http.Response> getCompetencies() async {
     var response = await _apiClient.getRequest(
-      path: '/users/competencies/unique-names',
+      path: '/competencies/unique-names',
     );
     log(response.body);
     return response;
@@ -99,12 +103,22 @@ class RemoteUserServices {
     int solutionDuration,
     List<Map<String, int>> answers,
   ) async {
-    var response = await _apiClient.postRequest(
+    var response = await _apiClient.request(
       path: '/users/$userId/competencies/$compId/test',
+      reqType: 'post',
       body: {
         "solutionDuration": solutionDuration,
         "answers": answers,
       },
+    );
+    log(response.body);
+    return response;
+  }
+
+  Future<http.Response> getFile(String directory, String name) async {
+    var response = await _apiClient.getRequest(
+      path: '/files/$directory/$name',
+      file: true,
     );
     log(response.body);
     return response;
